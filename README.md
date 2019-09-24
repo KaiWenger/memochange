@@ -161,8 +161,8 @@ oil$DATE[151]
 Consequently, the function indicates that there is a break in persistence in July, 1998. 
 This means that from the beginning of the sample until June 1998 the series is integrated with an order of 0.85 and from July 1998 on the order of integration increased to 1.03.
 
-As before, the function allows for various types of break point estimators. Instead of the default estimator of Busetti and Taylor (2004), one can also rely on the estimator of Leybourne, Kim, and Taylor (2006) by setting `type="LKT"`.
-This estimator relies on estimates of the long-run variance. Therefore, it is also needed that $m$ is chosen, which determines how many covariances are used when estimating the long-run variance. Leybourne, Kim, and Taylor (2006) suggest $m=0$.
+As before, the function allows for various types of break point estimators. Instead of the default estimator of Busetti and Taylor (2004), one can also rely on the estimator of Leybourne, Kim, and Taylor (2007) by setting `type="LKT"`.
+This estimator relies on estimates of the long-run variance. Therefore, it is also needed that $m$ is chosen, which determines how many covariances are used when estimating the long-run variance. Leybourne, Kim, and Taylor (2007) suggest $m=0$.
 
 ```r
 BP_estim(x,direction="01",type="LKT",m=0)
@@ -261,4 +261,19 @@ You are welcome to help us improving our package. Please submit an issue if you 
 
 ## References
 
+Busetti, F. and Taylor, R. AM (2004). Tests of stationarity against a change in persistence. Journal of Econometrics, 123(1), 33-66.  <https://doi.org/10.1016/j.jeconom.2003.10.028>. 
+
+Geweke, J. and Porter-Hudak, S. (1983). The estimation and application of long memory time series models. Journal of Time Series Analysis, 4(4), 221-238.  <https://doi.org/10.1111/j.1467-9892.1983.tb00371.x>.
+
+Harvey, D. I and Leybourne, S. and Taylor, R. AM (2006). Modified tests for a change in persistence. Journal of Econometrics, 134(2), 441-469.  <https://doi.org/10.1016/j.jeconom.2005.07.002>. 
+
+Leybourne, S. and Taylor, R. AM and Kim, T.-H. (2007). CUSUM of squares-based tests for a change in persistence. Journal of Time Series Analysis, 28(3), 408-433.  <https://doi.org/10.1111/j.1467-9892.2006.00517.x>. 
+
+Martins, L. F. and Rodrigues, P. MM (2014). Testing for persistence change in fractionally integrated models: an application to world inflation rates. Computational Statistics \& Data Analysis, 76, 502-522.  <https://doi.org/10.1016/j.csda.2012.07.021>. 
+
+Robinson, PM (1995). Gaussian semiparametric estimation of long range dependence. The Annals of Statistics, 23(5), 1630-1661.  <https://doi.org/10.1214/aos/1176324317>. 
+
+Shimotsu, K. and Phillips, P. CB (2005). Exact local Whittle estimation of fractional integration. The Annals of Statistics, 33(4), 1890-1933.  <https://doi.org/10.1214/009053605000000309>. 
+
 Wenger, K. and Leschinski, C. (2019). Fixed-bandwidth CUSUM tests under long memory. Econometrics and Statistics, forthcoming.  <https://doi.org/10.1016/j.ecosta.2019.08.001>.
+
