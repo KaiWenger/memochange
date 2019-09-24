@@ -1,5 +1,5 @@
 ---
-title: "memochange: An R package for estimation and tests in persistent time series"
+title: "memochange: An R package for estimation procedures and tests for persistent time series"
 tags:
   - R
   - time series analysis
