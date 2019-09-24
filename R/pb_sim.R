@@ -21,7 +21,9 @@ pb_sim<-function(T,tau,trend=c("none","linear"),tp=1,d1,d2,mean,var){
   T2<-round(T*(1-tau))
   if((T1+T2)>T){T2<-T2-1}
   if((T1+T2)<T){T2<-T2+1}
-  series<-c(FI.sim(T1,q=1,rho=0,d=d1,var=var),FI.sim(T2,q=1,rho=0,d=d2,var=var))+mean
+  S1=FI.sim(T1,q=1,rho=0,d=d1,var=var)+mean
+  S2=FI.sim(T2,q=1,rho=0,d=d2,var=var)+S1[length(S1)]
+  series=c(S1,S2)
   if(trend=="linear") series<-series + 1:T*tp
   return(series)
 }

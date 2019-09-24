@@ -30,7 +30,8 @@ LKSN_test<-function(x,trend=c("none","linear"),tau=0.2,simu=0,M=10000)
     stop("missing values not allowed in time series")
   if (mode(x) %in% ("numeric") == FALSE | is.vector(x)==FALSE)
     stop("x must be a univariate numeric time series")
-  if ((T*tau)>=11)
+  T<-length(x)
+  if ((T*tau)<11)
     stop("T*tau needs to be at least 11 to guarantee that the test statistic can be calculated")
   stat<-LKSN(x=x,trend=trend,tau=tau)
   t_stats<-c(min(stat$tstat1),min(stat$tstat2),min(stat$tstat1,stat$tstat2))
@@ -38,7 +39,6 @@ LKSN_test<-function(x,trend=c("none","linear"),tau=0.2,simu=0,M=10000)
   else{
     if(trend=="none") Crit<-getCV()$cv_LKSN_test[1:3,]
     if(trend=="linear") Crit<-getCV()$cv_LKSN_test[4:6,]
-    T<-length(x)
     if(T<100) Crit<-Crit[,1:2]
     if(T>1000) Crit<-Crit[,9:10]
     if(T>99 & T<1001){

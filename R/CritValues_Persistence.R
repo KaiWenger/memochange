@@ -326,7 +326,7 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
       M_R[l]<-min(tstat_sim$tstat2)
       M_M[l]<-min(M_N[l],M_R[l])
     }
-    crit<-matrix(c(quantile(M_N,c(0.9,.95)),quantile(M_R,c(0.9,.95))),nrow=2,ncol=2,byrow=TRUE)
+    crit<-matrix(c(quantile(M_N,c(0.1,.05)),quantile(M_R,c(0.1,.05)),quantile(M_M,c(0.1,.05))),nrow=3,ncol=2,byrow=TRUE)
   }
   return(crit)
 }
