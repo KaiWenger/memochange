@@ -58,7 +58,7 @@ oil$DATE=as.Date(oil$DATE)
 oil_xts=xts(oil[,-1],order.by = oil$DATE)
 plot.zoo(oil_xts,xlab="",ylab="Price",main="Crude Oil Price: West Texas Intermediate")
 ```
-![](oil_plot.eps)
+![](figures/oil_plot.eps)
 
 From the plot we observe that the series seems to be more variable in its second part from year 2000 onwards.  This is first evidence that a change in persistence has occurred. We can test this hypothesis using the functions `cusum_test`, `LBI_test`, `LKSN_test`, `MR_test`, and `ratio_test`. In this short example we use the ratio and MR test since these are the empirically most often applied one. The functionality of the other tests is similar. They all require a univariate numeric time series `x` as an input variable and yield a matrix of test statistic and critical values as an output variable.
 
