@@ -34,7 +34,7 @@ LBI_test<-function(x,trend=c("none","linear"),tau=0.2,statistic=c("mean","max","
   if (mode(x) %in% ("numeric") == FALSE | is.vector(x)==FALSE)
     stop("x must be a univariate numeric time series")
   T<-length(x)
-  f<-as.numeric(trend=="linear") + as.numeric(m>3)*(m-3)
+  f<-as.numeric(trend=="linear") 
   if ((T*tau)<=(f+1))
     stop("increase T*tau to guarantee that the test statistic can be calculated")
   stat<-LBI(x=x,trend=trend,tau=tau)
