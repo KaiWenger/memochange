@@ -79,16 +79,16 @@ ratio_test(x)
 
 ```
 
-This yields a matrix that gives test statistic and critical values for the null of constant $I(0)$ against a change from $I(0)$ to $I(1)$ or vice versa. Furthermore, the statistics for a change in an unknown direction are included as well. This accounts for the fact that we perform two tests facing a multiple testing problem. The results suggest that a change from $I(0)$ to $I(1)$ has occurred somewhere in the series since the test statistic exceeds the critical value at the one percent level. In addition, this value is also significant when accounting for the multiple testing problem. Consequently, the default version of the ratio test suggests a break in persistence. 
+This yields a matrix that gives test statistic and critical values for the null of constant I(0) against a change from I(0) to I(1) or vice versa. Furthermore, the statistics for a change in an unknown direction are included as well. This accounts for the fact that we perform two tests facing a multiple testing problem. The results suggest that a change from I(0) to I(1) has occurred somewhere in the series since the test statistic exceeds the critical value at the one percent level. In addition, this value is also significant when accounting for the multiple testing problem. Consequently, the default version of the ratio test suggests a break in persistence. 
 
 We can modify this default version by choosing the arguments `trend`, `tau`, `statistic`, `type`, `m`, `z`, `simu`, and `M` (see the help page of the ratio test for details). 
 The plot does not indicate a linear trend so that it seems unreasonable to change the trend argument. Also, the plot suggests that the break is rather in the middle of the series than at the beginning or the end so that changing the break fraction seems unnecessary as well. 
 The type of test statistic calculated can be easily changed using the statistic argument. However, simulation results indicate mean, max, and exp statistics to deliver qualitatively similar results.
 
-Something that is of more importance is the type of test performed. The default version considers the approach by Busetti and Taylor (2004). In case of a constant $I(1)$ process this test often spuriously identifies a break in persistence. Harvey, Leybourne and Taylor (2006) account for this issue by adjusting the test statistic such that its critical values are the same under constant $I(0)$ and constant $I(1)$.  We can calculate their test statistic by setting `type="HLT"`. For this purpose, we need to state the number of polynomials used in their test statistic. The default value is $9$ as suggested by Harvey, Leybourne and Taylor (2006).
-Choosing another value is only sensible for very large data sets (number of obs. > $10000$) where the test statistic cannot be calculated due to computational singularity. 
-In this case decreasing $z$ can allow the test statistic to be calculated. This, however, invalidates the critical values. 
-Since our data set is rather small we can stick with the default of $z=9$.
+Something that is of more importance is the type of test performed. The default version considers the approach by Busetti and Taylor (2004). In case of a constant I(1) process this test often spuriously identifies a break in persistence. Harvey, Leybourne and Taylor (2006) account for this issue by adjusting the test statistic such that its critical values are the same under constant I(0) and constant I(1).  We can calculate their test statistic by setting `type="HLT"`. For this purpose, we need to state the number of polynomials used in their test statistic. The default value is 9 as suggested by Harvey, Leybourne and Taylor (2006).
+Choosing another value is only sensible for very large data sets (number of obs. > 10000) where the test statistic cannot be calculated due to computational singularity. 
+In this case decreasing z can allow the test statistic to be calculated. This, however, invalidates the critical values. 
+Since our data set is rather small we can stick with the default of z=9.
 
 ```r
 ratio_test(x,type="HLT")
@@ -100,9 +100,9 @@ ratio_test(x,type="HLT")
 
 ```
 
-Again the test results suggests that there is a break from $I(0)$ to $I(1)$. Consequently, it is not a constant $I(1)$ process that led to a spurious rejection of the test by Busetti and Taylor (2004).
+Again the test results suggests that there is a break from I(0) to I(1). Consequently, it is not a constant I(1) process that led to a spurious rejection of the test by Busetti and Taylor (2004).
 
-Another test for a change in persistence is that by Martins and Rodrigues (2014). This is more general as it is not restricted to the $I(0)$/$I(1)$ framework, but can identify changes from $I(d_1)$ to $I(d_2)$ with $d_1 \neq d_2$ and $-1/2<d_1,d_2<2$.
+Another test for a change in persistence is that by Martins and Rodrigues (2014). This is more general as it is not restricted to the I(0)/I(1) framework, but can identify changes from I(d_1) to I(d_2) with $d_1 \neq d_2$ and $-1/2<d_1,d_2<2$.
 The default version is applied by
 
 ```r
@@ -129,7 +129,7 @@ MR_test(x,statistic="squared")
 
 ```
 
-As for the ratio test, changing the type of statistic has a rather small effect on the empirical performance of the test. The same is also true for the twostep argument which makes the function calculate the twostep version of the test if set to `TRUE`. Lastly, if we believe that the underlying process exhibits additional short run components, we can account for these by setting $p$ larger zero such as
+As for the ratio test, changing the type of statistic has a rather small effect on the empirical performance of the test. The same is also true for the twostep argument which makes the function calculate the twostep version of the test if set to `TRUE`. Lastly, if we believe that the underlying process exhibits additional short run components, we can account for these by setting p larger zero such as
 
 ```r
 MR_test(x,statistic="squared",p=1)
@@ -150,7 +150,7 @@ This can be estimated by the `BP_estim` function. It is important for the functi
 BP_estim(x,direction="01")
 ```
 
-This yields the location of the break (observation $151$), semiparametric estimates of the order of integration in the two regimes ($0.85$ and $1.03$) as well as the standard deviations of these estimates ($0.13$ and $0.15$).
+This yields the location of the break (observation 151), semiparametric estimates of the order of integration in the two regimes (0.85 and 1.03) as well as the standard deviations of these estimates (0.13 and 0.15).
 
 ```r
 oil$DATE[151]
@@ -162,13 +162,13 @@ Consequently, the function indicates that there is a break in persistence in Jul
 This means that from the beginning of the sample until June 1998 the series is integrated with an order of 0.85 and from July 1998 on the order of integration increased to 1.03.
 
 As before, the function allows for various types of break point estimators. Instead of the default estimator of Busetti and Taylor (2004), one can also rely on the estimator of Leybourne, Kim, and Taylor (2007) by setting `type="LKT"`.
-This estimator relies on estimates of the long-run variance. Therefore, it is also needed that $m$ is chosen, which determines how many covariances are used when estimating the long-run variance. Leybourne, Kim, and Taylor (2007) suggest $m=0$.
+This estimator relies on estimates of the long-run variance. Therefore, it is also needed that m is chosen, which determines how many covariances are used when estimating the long-run variance. Leybourne, Kim, and Taylor (2007) suggest m=0.
 
 ```r
 BP_estim(x,direction="01",type="LKT",m=0)
 ```
 
-This yields a similar result with the break point lying in the year 1998 and $d$ increasing from approximately $0.8$ to approximately $1$.
+This yields a similar result with the break point lying in the year 1998 and d increasing from approximately 0.8 to approximately 1.
 
 All other arguments of the function (`trend`, `tau`, `p`, `twostep`) were already discussed above except for `d_estim` and `d_bw`. These two arguments determine which estimator and bandwidth are used to estimate the order of integration in the two regimes. Concerning the estimator, the GPH (Geweke and Porter-Hudak (1983)) and the exact local Whittle estimator (Shimotsu and Phillips (2005)) can be selected. Although the exact local Whittle estimator has a lower variance, the GPH estimator is still often considered in empirical applications due to its simplicity. In our example the results of the two estimators are almost identical.
 
@@ -176,19 +176,19 @@ All other arguments of the function (`trend`, `tau`, `p`, `twostep`) were alread
 BP_estim(x,direction="01",d_estim="GPH")
 ```
 
-The `d_bw` argument determines how many frequencies are used for estimation. Larger values of $m$ imply a lower variance of the estimates, but also bias the estimator if the underlying process possesses short run dynamics.
-Usually a value between $0.5$ and $0.8$ is considered.
+The `d_bw` argument determines how many frequencies are used for estimation. Larger values of m imply a lower variance of the estimates, but also bias the estimator if the underlying process possesses short run dynamics.
+Usually a value between 0.5 and 0.8 is considered.
 
 ```r
 BP_estim(x,direction="01",d_bw=0.75)
 BP_estim(x,direction="01",d_bw=0.65)
 ```
 
-In our setup, it can be seen that increasing `d_bw` to $0.75$ does not severely change the estimated order of integration in the two regimes. Decreasing `d_bw`, however, leads to smaller estimates of $d$.\ 
+In our setup, it can be seen that increasing `d_bw` to 0.75 does not severely change the estimated order of integration in the two regimes. Decreasing `d_bw`, however, leads to smaller estimates of d.
 
 ### Tests for change-in-mean
 
-As an example how to conduct the change-in-mean tests implemented in the `memochange` package,  we compare the performance (in terms of size and power) of two implemented tests via a Monte Carlo simulation. We choose the two sample sizes $n=[100,500]$ and memory parameters $d=[0.1,0.2]$. To estimate the memory parameter we apply the local Whittle estimator by Robinson (1995). The setup is very similar to the published paper by Wenger and Leschinski (2019) who introduce the two applied tests. The simulation can be extended by all other change-in-mean tests that are implemented in the `memochange` package, which is not been done here to save computing time. The whole following code should run just around a few seconds.
+As an example how to conduct the change-in-mean tests implemented in the `memochange` package,  we compare the performance (in terms of size and power) of two implemented tests via a Monte Carlo simulation. We choose the two sample sizes n=[100,500] and memory parameters d=[0.1,0.2]. To estimate the memory parameter we apply the local Whittle estimator by Robinson (1995). The setup is very similar to the published paper by Wenger and Leschinski (2019) who introduce the two applied tests. The simulation can be extended by all other change-in-mean tests that are implemented in the `memochange` package, which is not been done here to save computing time. The whole following code should run just around a few seconds.
 
 ```r
 library(memochange)
@@ -222,9 +222,9 @@ test_func<-function(n,d)
 }
 ```
 
-The code implements the function the Monte Carlo simulation is based on. First, a long-memory time series `tseries` of length $n$ with memory $d$ is simulated that is not subject to a change-in-mean. For the second time series `tseries2` a mean shift of size $1$ is added. Then the memory parameters are estimated by local Whittle approach and the fixed-$m$ CUSUM type A and B tests of Wenger and Leschinski (2019) are applied. Arguments that must be provided to the tests are the estimated long-memory parameters, the type of procedure to be applied, as well as the bandwidth that is used in fixed-$m$ estimation. We choose the values suggested in Wenger and Leschinski (2019).
+The code implements the function the Monte Carlo simulation is based on. First, a long-memory time series `tseries` of length n with memory d is simulated that is not subject to a change-in-mean. For the second time series `tseries2` a mean shift of size 1 is added. Then the memory parameters are estimated by local Whittle approach and the fixed-m CUSUM type A and B tests of Wenger and Leschinski (2019) are applied. Arguments that must be provided to the tests are the estimated long-memory parameters, the type of procedure to be applied, as well as the bandwidth that is used in fixed-m estimation. We choose the values suggested in Wenger and Leschinski (2019).
 
-In the next step the Monte Carlo simulation ($250$ replications) is done. To do so, the `MonteCarlo` package needs to be loaded. The results of the Monte Carlo simulation is viewed as a LaTeX table.
+In the next step the Monte Carlo simulation (250 replications) is done. To do so, the `MonteCarlo` package needs to be loaded. The results of the Monte Carlo simulation is viewed as a LaTeX table.
 
 ```r
 library(MonteCarlo)
@@ -240,7 +240,7 @@ cols    <- c("d")
 MakeTable(output=erg, rows=rows, cols=cols, digits=2, include_meta = FALSE)
 ```
 
-Both tests should hold their nominal size (first two tables), which is chosen as $5\%$. Furthermore, the power of the tests (third and fourth table) should increase as the sample size $n$ increases and decrease as the memory $d$ increases. Example results of a run of the Monte Carlo code are given in the next table.
+Both tests should hold their nominal size (first two tables), which is chosen as 5%. Furthermore, the power of the tests (third and fourth table) should increase as the sample size n increases and decrease as the memory d increases. Example results of a run of the Monte Carlo code are given in the next table.
 
 | n/d  | 0.1    |  0.2  |  0.1 |  0.2    |
 | :-   | :----: | :---: | :---:| :----:  | 
