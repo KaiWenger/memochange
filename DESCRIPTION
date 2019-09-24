@@ -1,6 +1,6 @@
 Package: memochange
 Title: Testing for Structural Breaks under Long Memory and Testing for Changes in Persistence
-Version: 1.0.0
+Version: 1.0.1
 Date: 2019-09-23
 Authors@R: c(person("Janis", "Becker", email = "janisbecker92@gmail.com", role = c("aut")), person("Kai", "Wenger", email = "kai.wenger@gmx.de", role = c("aut","cre")))
 Description: Test procedures and break point estimators for persistent processes that exhibit structural breaks in mean or in persistence.
