@@ -1,7 +1,7 @@
 
 # memochange
 ## Testing for Structural Breaks under Long Memory and Testing for Changes in Persistence
-<!--- [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/memochange)](https://CRAN.R-project.org/package=memochange) -->
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/memochange)](https://CRAN.R-project.org/package=memochange)
 
 
 The `memochange` package implements the most prominent test procedures and break point estimators for persistent processes that exhibit structural breaks in mean or in persistence.
