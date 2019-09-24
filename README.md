@@ -9,7 +9,7 @@ On the one hand, the package contains the most popular approaches for testing wh
 On the other hand, the package contains the most popular approaches to test for a change-in-mean in a long-memory time series. 
 These include memory robust versions of the CUSUM, sup-Wald, and Wilcoxon type tests. The tests either utilize consistent estimates of the long-run variance or a self normalization approach in their test statistics.
 
-`memochange` may be of interest to those who analyse macroeconomic and financial time series such as inflation rates, trading volume, interest rates, volatilities and so ons
+`memochange` may be of interest to those who analyse macroeconomic and financial time series such as inflation rates, trading volume, interest rates, volatilities and so on.
 
 
 You can install this R package from GitHub:
