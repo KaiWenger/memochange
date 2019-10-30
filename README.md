@@ -98,7 +98,7 @@ ratio_test(x,type="HLT")
 
 Again the test results suggests that there is a break from I(0) to I(1). Consequently, it is not a constant I(1) process that led to a spurious rejection of the test by Busetti and Taylor (2004).
 
-Another test for a change in persistence is that by Martins and Rodrigues (2014). This is more general as it is not restricted to the I(0)/I(1) framework, but can identify changes from I(d_1) to I(d_2) with d_1 \neq d_2 and -1/2<d_1,d_2<2.
+Another test for a change in persistence is that by Martins and Rodrigues (2014). This is more general as it is not restricted to the I(0)/I(1) framework, but can identify changes from I(d_1) to I(d_2) with d_1 != d_2 and -1/2<d_1,d_2<2.
 The default version is applied by
 
 ```r
