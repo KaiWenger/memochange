@@ -1,0 +1,57 @@
+context("ratio_test")
+set.seed(410)
+x=rnorm(100)
+expect_error(ratio_test(x,trend="limear"))
+expect_error(ratio_test(x,tau=0))
+expect_error(ratio_test(x,tau=2))
+expect_error(ratio_test(x,type="SK"))
+expect_error(ratio_test(x,m=100,type="LT"))
+expect_error(ratio_test(x,z=100,type="HLTmin"))
+expect_warning(ratio_test(x,simu=0,tau=0.1))
+x=stats::ts(x)
+expect_error(ratio_test(x))
+x=matrix(1:100,ncol=2)
+expect_error(ratio_test(x))
+
+#size
+trend = c("none", "linear")
+statistic = c("mean", "max", "exp")
+type = c("BT", "LT", "HLT","HLTmin")
+for(a in 1:2){
+  tr=trend[a]
+  for(b in 1:3){
+    st=statistic[b]
+    for(c in 1:4){
+      q=0
+      ty=type[c]
+      for(i in 1:5){
+        x=rnorm(75)
+        mod=ratio_test(x,trend=tr,statistic=st,type=ty)
+        expect_lt(mod[1,1],mod[1,2]) #critical values should be in ascending order
+        if(c==1 | c==2) expect_equal(max(mod[1,4],mod[2,4]),mod[3,4]) #max of test statistics should equal test statistic in both directions 
+        q=q+sum(mod[,4]>mod[,3])
+      }
+      expect_lt(q,11)  #test should not reject H0 (which is true) in more than 10 of 15 cases at the 99 percent level
+    }
+  }
+}
+
+#test has power
+for(a in 1:2){
+  tr=trend[a]
+  for(b in 1:3){
+    st=statistic[b]
+    for(c in 1:4){
+      q=0
+      ty=type[c]
+      for(i in 1:5){
+        x=pb_sim(100, 0.5, "none", d1=0, d2=1, mean=0, var=1)
+        mod=ratio_test(x,trend=tr,statistic=st,type=ty)
+        q=q+sum(mod[,4]>mod[,1])
+      }
+      expect_gt(q,2) #test should reject H0 at least in three of 15 cases at the 90 percent level
+    }
+  }
+}
+
+
