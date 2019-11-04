@@ -29,7 +29,7 @@ install.packages("memochange")
 Examples
 --------
 
-In this section we present two short examples that illustrate how the implemented procedures can be used on a real data. A more detailed presentation of the various tests and functions can be found in the vignette.
+In this section we present two short examples that illustrate how the implemented procedures can be used on a real data set. A more detailed presentation of the various tests and functions can be found in the vignette.
 
 ### Tests for persistence change
 
