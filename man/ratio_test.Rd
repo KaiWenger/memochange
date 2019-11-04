@@ -9,19 +9,19 @@ ratio_test(x, trend = c("none", "linear"), tau = 0.2,
   "HLTmin"), m = 0, z = 9, simu = 0, M = 10000)
 }
 \arguments{
-\item{x}{the univariate numeric time series to be investigated.}
+\item{x}{the univariate numeric vector to be investigated. Missing values are not allowed.}
 
-\item{trend}{whether the time series exhibits a trend, \code{none} implies no trend and \code{linear} implies a linear trend.}
+\item{trend}{whether the time series exhibits a trend, \code{"none"} implies no trend and \code{"linear"} implies a linear trend.}
 
-\item{tau}{the function tests in the interval \code{[T*tau,T*(1-tau)]} for a break in persistence with T being the length of the time series. It must hold that \code{0<tau<0.5}, default is \code{tau=0.2} as commonly used in the literature.}
+\item{tau}{the function tests in the interval \code{[T*tau,T*(1-tau)]} for a break in persistence with T being the length of the time series. It must hold that \code{0<tau<0.5}, default is \code{tau=0.2} as commonly used in the literature. Note that if \code{type="BT"} or \code{type="HLT"} and \code{T*tau<= 1 + as.numeric(trend=="linear")}, \code{type="LT"} and \code{T*tau<=1+ as.numeric(trend=="linear") + (m>3)*(m-3)}, or \code{type="HLT"} and \code{T*tau<=(z+1)} the test statistic cannot be calculated.}
 
-\item{statistic}{which type of test statistic should be used, \code{mean} corresponds to Hansen's (1991) mean score, \code{max} to Andrews' (1993) maximum statistic, and \code{exp} to Andrews and Ploberger's (1994) mean-exponential statistic}
+\item{statistic}{which type of test statistic should be used, \code{"mean"} corresponds to Hansen's (1991) mean score, \code{"max"} to Andrews' (1993) maximum statistic, and \code{"exp"} to Andrews and Ploberger's (1994) mean-exponential statistic}
 
-\item{type}{which type of ratio test should be performed, \code{BT} for the standard ratio test by Busetti and Taylor (2004), \code{LT} for the modified ratio test by Leybourne and Taylor (2004), and \code{HLT} respectively \code{HLTmin} are the modified tests by Harvey, Leybourne, and Taylor (2006). See details.}
+\item{type}{which type of ratio test should be performed, \code{"BT"} for the standard ratio test by Busetti and Taylor (2004), \code{"LT"} for the modified ratio test by Leybourne and Taylor (2004), and \code{"HLT"}" respectively \code{"HLTmin"} are the modified tests by Harvey, Leybourne, and Taylor (2006). See details.}
 
-\item{m}{Number of covariances used for the estimation of the long run variance if \code{LT} is considered. Default is \code{m=0}.}
+\item{m}{Number of covariances used for the estimation of the long run variance if \code{statistic=LT} is used. Default is \code{m=0}.}
 
-\item{z}{Number of polynomials used if \code{HLT} or \code{HLTmin} are considered. Default is \code{z=9}.}
+\item{z}{Number of polynomials used if \code{"HLT"} or \code{"HLTmin"} are considered. Default is \code{z=9}.}
 
 \item{simu}{whether critical values should be simulated or interpolated, \code{simu=1} means simulation, \code{simu=0} means interpolation based on critical values for \code{tau=0.2}. See details. Default is \code{simu=0}.}
 
@@ -47,13 +47,18 @@ a unit root test. This allows the test statistic to have the same critical value
 It should be noted, however, that only the critical values are identical, the distribution is highly irregular.
 
 The critical values of the tests vary with the sample size. If \code{simu=0}, the critical values provided
-are based on linear interpolation of the critical values simulated by Harvey, Leybourne, and Taylor (2006). These are based on \code{tau=0.2}. If \code{simu=1},
-the critical values are simulated based on the given setup using M replications. Caution, for large M this might take a while,
-small M, however, make the results unreliable.
+are based on linear interpolation of the critical values simulated by Harvey, Leybourne, and Taylor (2006). These are, however, only valid for \code{tau=0.2}, \code{m=0}, and \code{z=9}. 
+In case that non-default values are chosen for \code{tau}, \code{m}, or \code{z}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. Caution, for M=10,000 this takes at least thirty minutes, depending on the length of the time series.
+Smaller M, however, make the results unreliable.
 }
 \examples{
-series<- c(rnorm(200),cumsum(rnorm(200)))
-ratio_test(series,trend="none",type="BT",statistic="mean")
+set.seed(410)
+
+# generate dummy-data
+series <- c(rnorm(200), cumsum(rnorm(200))) 
+
+# test for a break in persistence
+ratio_test(series)
 }
 \references{
 Busetti, F. and Taylor, R. (2004): Tests of stationarity against a change in persistence. Journal of Econometrics, 123, pp. 33-66.
@@ -61,6 +66,9 @@ Busetti, F. and Taylor, R. (2004): Tests of stationarity against a change in per
 Leybourne, S. and Taylor, R. (2004): On tests for changes in persistence. Economics letters, 84, pp. 107-115.
 
 Harvey, D., Leybourne, S. and Taylor, R. (2006): Modified tests for a change in persistence. Journal of Econometrics, 134, pp. 441-469.
+}
+\seealso{
+\code{\link{cusum_test}}, \code{\link{LBI_test}}, \code{\link{LKSN_test}}, \code{\link{MR_test}}.
 }
 \author{
 Janis Becker

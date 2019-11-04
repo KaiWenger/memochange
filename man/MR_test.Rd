@@ -5,25 +5,23 @@
 \title{LM test against a change in persistence}
 \usage{
 MR_test(x, trend = c("none", "linear"), tau = 0.2,
-  statistic = c("standard", "squared"), simu = 0, M = 10000, p = 0,
-  twostep = c(FALSE, TRUE))
+  statistic = c("squared", "standard"), simu = 0, M = 10000,
+  serial = c(FALSE, TRUE))
 }
 \arguments{
-\item{x}{the univariate numeric time series to be investigated.}
+\item{x}{the univariate numeric vector to be investigated. Missing values are not allowed.}
 
-\item{trend}{whether the time series exhibits a trend, \code{none} implies no trend and \code{linear} implies a linear trend.}
+\item{trend}{whether the time series exhibits a trend, \code{"none"} implies no trend and \code{"linear"} implies a linear trend.}
 
-\item{tau}{the function tests in the interval \code{[T*tau,T*(1-tau)]} for a break in persistence with T being the length of the time series. It must hold that \code{0<tau<0.5}, default is \code{tau=0.2} as commonly used in the literature.}
+\item{tau}{the function tests in the interval \code{[T*tau,T*(1-tau)]} for a break in persistence with T being the length of the time series. It must hold that \code{0<tau<0.5}, default is \code{tau=0.2} as commonly used in the literature. Note that if \code{T*tau<=2} the test statistic cannot be calculated.}
 
-\item{statistic}{which type of test statistic should be used, \code{standard} for the standard t-test and \code{squared} for the squared test statistic.}
+\item{statistic}{which type of test statistic should be used, \code{"squared"} for the squared t-statistic and \code{"standard"} for the standard t-test. Default is \code{statistic="squared"}.}
 
 \item{simu}{whether critical values should be simulated or interpolated, \code{simu=1} means simulation, \code{simu=0} means interpolation. See details. Default is \code{simu=0}.}
 
 \item{M}{number of replications in case critical values should be simulated. Default is \code{M=10000}.}
 
-\item{p}{order of the AR-model used to account for serial correlation of the errors. Default is \code{p=0}.}
-
-\item{twostep}{boolean, indicating whether the two step procedure or the one step procedure should be used. Default is \code{twostep=FALSE}.}
+\item{serial}{boolean, indicating whether to account for serial correlation of the errors. Default is \code{serial=FALSE} implying no correction for serial correlation.}
 }
 \value{
 Returns a matrix that consists of test statistic and critical values (corresponding to \code{alpha=0.1,0.05,0.01}) for testing against an increase in memory, against a decrease in memory, and against a change in an unknown direction.
@@ -35,18 +33,24 @@ an increase or a decrease of the memory parameter has occured over time.
 }
 \details{
 The critical values of the tests vary with sample size and memory parameter d. If \code{simu=0}, the critical values provided
-are based on linear interpolation of the critical values simulated by Martins and Rodrigues (2014). These are based on \code{tau=0.2}.
-If \code{simu=1}, the critical values are simulated based on the given data using M replications. Caution, for large M this might take a while,
-small M, however, make the results unreliable.
+are based on linear interpolation of the critical values simulated by Martins and Rodrigues (2014). These are, however, only valid for \code{tau=0.2} and \code{serial=FALSE}. 
+In case that non-default values are chosen for \code{tau} or \code{serial}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. Caution, for M=10,000 this takes at least thirty minutes, depending on the length of the time series.
+Smaller M, however, make the results unreliable.
 }
 \examples{
-library(fracdiff)
-library(LongMemoryTS)
-series<- c(rnorm(200),cumsum(rnorm(200)))
-MR_test(series,trend="none",statistic="standard",twostep=FALSE)
+set.seed(410)
+
+# generate dummy-data
+series <- c(rnorm(200), cumsum(rnorm(200)))
+
+# test for a break in persistence
+MR_test(series, trend="none", statistic="standard")
 }
 \references{
 Martins, L.. and Rodrigues, P. (2014): Testing for persistence change in fractionally integrated models: An application to world inflation rates. Computational Statistics and Data Analysis, 76, pp. 502-522.
+}
+\seealso{
+\code{\link{cusum_test}}, \code{\link{LBI_test}}, \code{\link{LKSN_test}}, \code{\link{ratio_test}}.
 }
 \author{
 Janis Becker

@@ -4,20 +4,20 @@
 \alias{CUSUMLM}
 \title{CUSUM long memory test for a single change in the mean of a long-memory time series.}
 \usage{
-CUSUMLM(tseries, d, delta, tau = 0.15)
+CUSUMLM(x, d, delta, tau = 0.15)
 }
 \arguments{
-\item{tseries}{the univariate numeric time series to be investigated.}
+\item{x}{the univariate numeric vector to be investigated. Missing values are not allowed.}
 
-\item{d}{the long-memory parameter.}
+\item{d}{integer that specifies the long-memory parameter.}
 
-\item{delta}{the bandwidth that is used to estimate the constant \code{G} that approximates the short run dynamics of the time series at the origin.
+\item{delta}{integer that determines the bandwidth that is used to estimate the constant \code{G} that approximates the short run dynamics of the time series at the origin.
 The same bandwidth should be used that is applied to estimate \code{d} before. See Wenger, Leschinski, Sibbertsen (2018) for details.}
 
-\item{tau}{defines the search area, which is \code{[tau,1-tau]}. Default is \code{tau=0.15} as suggested by Andrews (1993).}
+\item{tau}{integer that defines the search area, which is \code{[tau,1-tau]}. Default is \code{tau=0.15} as suggested by Andrews (1993).}
 }
 \value{
-Returns the test statistic and the corresponding critical values of the test.
+Returns a numeric vector containing the test statistic and the corresponding critical values of the test.
 }
 \description{
 This function performs a modified CUSUM test for a change-in-mean that is robust under long memory. It replaces the standardization
@@ -28,20 +28,28 @@ The function returns the test statistic as well as critical values.
 Note that the critical values are generated for \code{tau=0.15}.
 }
 \examples{
-library(fracdiff)
-library(LongMemoryTS)
-
-n        <- 500
+# set model parameters
+T        <- 500
 d        <- 0.2
-tseries  <- fracdiff.sim(n=n,d=d)$series
-d_est    <- local.W(tseries, m=floor(1+n^0.65))$d
 
-changep  <- c(rep(0,n/2),rep(1,n/2))
+set.seed(410)
+
+# generate a fractionally integrated (long-memory) time series
+tseries  <- fracdiff::fracdiff.sim(n=T, d=d)$series
+
+# generate a fractionally integrated (long-memory) time series with a change in mean in the middle of the series
+changep  <- c(rep(0,T/2), rep(1,T/2))
 tseries2 <- tseries+changep
-d_est2   <- local.W(tseries2, m=floor(1+n^0.65))$d
 
-CUSUMLM(tseries,delta=0.65,d=d_est)
-CUSUMLM(tseries2,delta=0.65,d=d_est2)
+# estimate the long-memory parameter of both series via local Whittle approach. The bandwidth to estimate d is chosen as T^0.65, which is usual in literature
+d_est    <- LongMemoryTS::local.W(tseries, m=floor(1+T^0.65))$d
+d_est2   <- LongMemoryTS::local.W(tseries2, m=floor(1+T^0.65))$d
+
+# perform the test on both time series
+CUSUMLM(tseries, delta=0.65, d=d_est)
+CUSUMLM(tseries2, delta=0.65, d=d_est2)
+# For the series with no change in mean the test does not reject the null hypothesis of a constant mean across time at any reasonable significance level.
+# For the series with a change in mean the test rejects the null hypothesis at a 1\% significance level.
 }
 \references{
 Wenger, K. and Leschinski, C. and Sibbertsen, P. (2018): Change-in-mean tests in long-memory time series: a review of recent developments. AStA Advances in Statistical Analysis, 103:2, pp. 237-256.
@@ -51,6 +59,9 @@ Wang, L. (2008): Change-in-mean problem for long memory time series models with 
 Horvath, L. and Kokoszka, P. (1997): The effect of long-range dependence on change-point estimators. Journal of Statistical Planung and Inference, 64, pp. 57-81.
 
 Andrews, D. W. K. (1993): Tests for Parameter Instability and Structural Change With Unknown Change Point. Econometrica, 61, pp. 821-856.
+}
+\seealso{
+\code{\link{CUSUMfixed}}, \code{\link{CUSUM_simple}}
 }
 \author{
 Kai Wenger

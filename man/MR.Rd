@@ -4,7 +4,7 @@
 \alias{MR}
 \title{function to calculate sequence of test statistics by Martins and Rodrigues (2014). For internal use only}
 \usage{
-MR(x, trend, p, twostep, tau)
+MR(x, trend, serial, tau)
 }
 \description{
 function to calculate sequence of test statistics by Martins and Rodrigues (2014). For internal use only

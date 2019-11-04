@@ -4,8 +4,8 @@
 \alias{CV}
 \title{function to generate critical values. For internal use only.}
 \usage{
-CV(x, statistic, trend, type, m = 0, M, d = 0, tau, p = 0,
-  twostep = FALSE)
+CV(x, statistic, trend, type, m = 0, M, d = 0, tau, serial = FALSE,
+  lmax = 0)
 }
 \description{
 function to generate critical values. For internal use only.

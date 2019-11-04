@@ -4,23 +4,23 @@
 \alias{CUSUMfixed}
 \title{Self-normalized CUSUM tests for structural change under long memory.}
 \usage{
-CUSUMfixed(tseries, d, procedure, bandw, tau = 0.15)
+CUSUMfixed(x, d, procedure, bandw, tau = 0.15)
 }
 \arguments{
-\item{tseries}{the univariate numeric time series to be investigated.}
+\item{x}{the univariate numeric vector to be investigated. Missing values are not allowed.}
 
-\item{d}{the long-memory parameter.}
+\item{d}{integer that specifies the long-memory parameter.}
 
-\item{procedure}{specifies whether the CUSUM fixed-b or fixed-m type A or type B tests are used. It can be chosen between
+\item{procedure}{string that specifies whether the CUSUM fixed-b or fixed-m type A or type B tests are used. It can be chosen between
 \code{"CUSUMfixedb_typeA"}, \code{"CUSUMfixedb_typeB"}, \code{"CUSUMfixedm_typeA"}, and \code{"CUSUMfixedm_typeB"} (see Wenger, Leschinski (2019) for details).}
 
-\item{bandw}{the bandwidth used for estimation of the long-run variance. For the fixed-b tests \code{b=[0.05,0.1,0.2,0.3,...,0.9,1]}, for the
+\item{bandw}{integer that determines the bandwidth used for estimation of the long-run variance. For the fixed-b tests \code{b=[0.05,0.1,0.2,0.3,...,0.9,1]}, for the
 fixed-m tests \code{m=[1,2,3,4,10,25,50,100,150,200]}. Recommended bandwidth by Wenger, Leschinski (2019) are \code{b=0.1} and \code{m=10}.}
 
-\item{tau}{defines the search area, which is \code{[tau,1-tau]}. Default is \code{tau=0.15} as suggested by Andrews (1993).}
+\item{tau}{integer that defines the search area, which is \code{[tau,1-tau]}. Default is \code{tau=0.15} as suggested by Andrews (1993).}
 }
 \value{
-Returns the test statistic and the corresponding critical values of the test.
+Returns a numeric vector containing the test statistic and the corresponding critical values of the test.
 }
 \description{
 This function performs a family of CUSUM tests for a change-in-mean that are robust under long memory. They apply non-parametric kernel-based
@@ -32,28 +32,35 @@ Note that the critical values are generated for \code{tau=0.15} using the Bartle
 ordinates (which corresponds to the Daniell kernel) for the fixed-m tests.
 }
 \examples{
-library(fracdiff)
-library(longmemo)
-library(LongMemoryTS)
-
-n        <- 500
+# set model parameters
+T        <- 500
 d        <- 0.2
-tseries  <- fracdiff.sim(n=n,d=d)$series
-d_est    <- local.W(tseries, m=floor(1+n^0.65))$d
 
-changep  <- c(rep(0,n/2),rep(1,n/2))
+set.seed(410)
+
+# generate a fractionally integrated (long-memory) time series
+tseries  <- fracdiff::fracdiff.sim(n=T, d=d)$series
+
+# generate a fractionally integrated (long-memory) time series with a change in mean in the middle of the series
+changep  <- c(rep(0,T/2), rep(1,T/2))
 tseries2 <- tseries+changep
-d_est2   <- local.W(tseries2, m=floor(1+n^0.65))$d
 
-CUSUMfixed(tseries,d=d_est,procedure="CUSUMfixedb_typeA",bandw=0.1)
-CUSUMfixed(tseries,d=d_est,procedure="CUSUMfixedb_typeB",bandw=0.1)
-CUSUMfixed(tseries,d=d_est,procedure="CUSUMfixedm_typeA",bandw=10)
-CUSUMfixed(tseries,d=d_est,procedure="CUSUMfixedm_typeB",bandw=10)
+# estimate the long-memory parameter of both series via local Whittle approach. The bandwidth to estimate d is chosen as T^0.65, which is usual in literature
+d_est    <- LongMemoryTS::local.W(tseries, m=floor(1+T^0.65))$d
+d_est2   <- LongMemoryTS::local.W(tseries2, m=floor(1+T^0.65))$d
 
-CUSUMfixed(tseries2,d=d_est2,procedure="CUSUMfixedb_typeA",bandw=0.1)
-CUSUMfixed(tseries2,d=d_est2,procedure="CUSUMfixedb_typeB",bandw=0.1)
-CUSUMfixed(tseries2,d=d_est2,procedure="CUSUMfixedm_typeA",bandw=10)
-CUSUMfixed(tseries2,d=d_est2,procedure="CUSUMfixedm_typeB",bandw=10)
+# perform the different types of the test on both time series
+CUSUMfixed(tseries, d=d_est, procedure="CUSUMfixedb_typeA", bandw=0.1)
+CUSUMfixed(tseries, d=d_est, procedure="CUSUMfixedb_typeB", bandw=0.1)
+CUSUMfixed(tseries, d=d_est, procedure="CUSUMfixedm_typeA", bandw=10)
+CUSUMfixed(tseries, d=d_est, procedure="CUSUMfixedm_typeB", bandw=10)
+
+CUSUMfixed(tseries2, d=d_est2, procedure="CUSUMfixedb_typeA", bandw=0.1)
+CUSUMfixed(tseries2, d=d_est2, procedure="CUSUMfixedb_typeB", bandw=0.1)
+CUSUMfixed(tseries2, d=d_est2, procedure="CUSUMfixedm_typeA", bandw=10)
+CUSUMfixed(tseries2, d=d_est2, procedure="CUSUMfixedm_typeB", bandw=10)
+# For the series with no change in mean all tests do not reject the null hypothesis of a constant mean across time at any reasonable significance level.
+# For the series with a change in mean all tests reject the null hypothesis at a 1\% significance level.
 }
 \references{
 Wenger, K. and Leschinski, C. (2019): Change-in-mean tests in long-memory time series: a review of recent developments. AStA Advances in Statistical Analysis, 103:2, pp. 237-256.
@@ -61,6 +68,9 @@ Wenger, K. and Leschinski, C. (2019): Change-in-mean tests in long-memory time s
 Hualde, J. and Iacone, F. (2017): Fixed bandwidth asymptotics for the studentized mean of fractionally integrated processes. Economics Letters, 150, pp. 39-43.
 
 Andrews, D. W. K. (1993): Tests for Parameter Instability and Structural Change With Unknown Change Point. Econometrica, 61, pp. 821-856.
+}
+\seealso{
+\code{\link{CUSUMLM}}, \code{\link{CUSUM_simple}}, \code{\link{fixbsupw}}
 }
 \author{
 Kai Wenger

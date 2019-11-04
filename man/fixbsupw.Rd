@@ -4,20 +4,20 @@
 \alias{fixbsupw}
 \title{Fixed-b sup Wald test for a single change in the mean of a long-memory time series.}
 \usage{
-fixbsupw(tseries, d, bandw = 0.1, tau = 0.15)
+fixbsupw(x, d, bandw = 0.1, tau = 0.15)
 }
 \arguments{
-\item{tseries}{the univariate numeric time series to be investigated.}
+\item{x}{the univariate numeric vector to be investigated. Missing values are not allowed.}
 
-\item{d}{the long-memory parameter.}
+\item{d}{integer that specifies the long-memory parameter.}
 
-\item{bandw}{the bandwidth parameter for the long-run variance estimator. It can take values in the range \code{bandw=[0.05,0.1,0.2]}. Default is
+\item{bandw}{integer that determines the bandwidth parameter for the long-run variance estimator. It can take values in the range \code{bandw=[0.05,0.1,0.2]}. Default is
 \code{bandw=0.1}, which is suggested by Iacone, Leybourne and Taylor (2014).}
 
-\item{tau}{defines the search area, which is \code{[tau,1-tau]}. Default is \code{tau=0.15} as suggested by Andrews (1993).}
+\item{tau}{integer that defines the search area, which is \code{[tau,1-tau]}. Default is \code{tau=0.15} as suggested by Andrews (1993).}
 }
 \value{
-Returns the test statistic and the corresponding critical values of the test.
+Returns a numeric vector containing the test statistic and the corresponding critical values of the test.
 }
 \description{
 This function performs a sup-Wald test on a change-in-mean, which is standardized by a non-parametric kernel-based long-run variance estimator.
@@ -28,25 +28,36 @@ The function returns the test statistic as well as critical values.
 Note that the critical values are generated for \code{tau=0.15} using the Bartlett kernel.
 }
 \examples{
-library(fracdiff)
-library(LongMemoryTS)
-
-n        <- 500
+# set model parameters
+T        <- 500
 d        <- 0.2
-tseries  <- fracdiff.sim(n=n,d=d)$series
-d_est    <- local.W(tseries, m=floor(1+n^0.65))$d
 
-changep  <- c(rep(0,n/2),rep(1,n/2))
+set.seed(410)
+
+# generate a fractionally integrated (long-memory) time series
+tseries  <- fracdiff::fracdiff.sim(n=T, d=d)$series
+
+# generate a fractionally integrated (long-memory) time series with a change in mean in the middle of the series
+changep  <- c(rep(0,T/2), rep(1,T/2))
 tseries2 <- tseries+changep
-d_est2   <- local.W(tseries2, m=floor(1+n^0.65))$d
 
-fixbsupw(tseries,d=d_est)
-fixbsupw(tseries2,d=d_est2)
+# estimate the long-memory parameter of both series via local Whittle approach. The bandwidth to estimate d is chosen as T^0.65, which is usual in literature
+d_est    <- LongMemoryTS::local.W(tseries, m=floor(1+T^0.65))$d
+d_est2   <- LongMemoryTS::local.W(tseries2, m=floor(1+T^0.65))$d
+
+# perform the test on both time series
+fixbsupw(tseries, d=d_est)
+fixbsupw(tseries2, d=d_est2)
+# For the series with no change in mean the test does not reject the null hypothesis of a constant mean across time at any reasonable significance level.
+# For the series with a change in mean the test rejects the null hypothesis at a 1\% significance level.
 }
 \references{
 Iacone, F. and Leybourne, S. J. and Taylor, R. A. M. (2014): A fixed-b Test for a Break in Level at an unknown Time under Fractional Integration. Journal of Time Series Analysis, 35, pp. 40-54.
 
 Andrews, D. W. K. (1993): Tests for Parameter Instability and Structural Change With Unknown Change Point. Econometrica, 61, pp. 821-856.
+}
+\seealso{
+\code{\link{CUSUMfixed}}, \code{\link{snsupwald}}
 }
 \author{
 Kai Wenger

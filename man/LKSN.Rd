@@ -4,7 +4,7 @@
 \alias{LKSN}
 \title{function to calculate sequence of LKSN test statistics. For internal use only}
 \usage{
-LKSN(x, trend, tau)
+LKSN(x, trend, tau, lmax)
 }
 \description{
 function to calculate sequence of LKSN test statistics. For internal use only
