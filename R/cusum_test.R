@@ -13,23 +13,27 @@
 #'
 #' The critical values of the tests vary with sample size and d. If \code{simu=0}, the critical values provided
 #' are based on linear interpolation of the critical values simulated by Leybourne, Taylor, and Kim (2006) respectively the response curves by Sibbertsen and Kruse (2009).
-#' These are based on \code{tau=0.2}.
-#' If \code{simu=1}, the critical values are simulated based on the given setup using M replications. Caution, for large M this might take a while,
-#' small M, however, make the results unreliable.
+#' These are, however, only valid for \code{tau=0.2} and \code{m=0}. 
+#' In case that non-default values are chosen for \code{tau} or \code{m}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. Caution, for M=10,000 this takes at least thirty minutes, depending on the length of the time series.
+#' Smaller M, however, make the results unreliable.
 #'
-#' @param x the univariate numeric time series to be investigated.
-#' @param trend whether the time series exhibits a trend, \code{none} implies no trend and \code{linear} implies a linear trend.
-#' @param tau the function tests in the interval \code{[T*tau,T*(1-tau)]} for a break in persistence with T being the length of the time series. It must hold that \code{0<tau<0.5}, default is \code{tau=0.2} as commonly used in the literature.
-#' @param type which type of cusum test should be performed, \code{LKT} for the cusum test by Leybourne, Taylor, and Kim (2006) and \code{SK} for the extension by Sibbertsen and Kruse (2009). See details.
+#' @param x the univariate numeric vector to be investigated. Missing values are not allowed.
+#' @param trend whether the time series exhibits a trend, \code{"none"} implies no trend and \code{"linear"} implies a linear trend.
+#' @param tau the function tests in the interval \code{[T*tau,T*(1-tau)]} for a break in persistence with T being the length of the time series. It must hold that \code{0<tau<0.5}, default is \code{tau=0.2} as commonly used in the literature. Note that if \code{T*tau<=1+as.numeric(trend=="linear") + (m>3)*(m-3)} the test statistic cannot be calculated.
+#' @param type which type of cusum test should be performed, \code{"LKT"} for the cusum test by Leybourne, Taylor, and Kim (2006) and \code{"SK"} for the extension by Sibbertsen and Kruse (2009). See details.
 #' @param m Number of covariances used for the estimation of the long run variance. Default is \code{m=0}.
 #' @param simu whether critical values should be simulated or interpolated, \code{simu=1} means simulation, \code{simu=0} means interpolation based on critical values for \code{tau=0.2}. See details. Default is \code{simu=0}.
 #' @param M number of replications in case critical values should be simulated. Default is \code{M=10000}.
 #' @return Returns a matrix that consists of test statistic and critical values for testing against a change from nonstationary to stationary, stationary to nonstationary, and against a change in an unknown direction.
 #' @author Janis Becker
 #' @examples
-#' library(fracdiff)
-#' series<- c(rnorm(200),cumsum(rnorm(200)))
-#' cusum_test(series,trend="none",type="SK")
+#' set.seed(410)
+#'
+#' # generate dummy-data
+#' series <- c(rnorm(200), cumsum(rnorm(200)))
+#' 
+#' # test for a break in persistence
+#' cusum_test(series, trend="none", type="SK")
 #' @references
 #' Leybourne, S., Kim, T., and Taylor, R. (2007): Cusum of squares-based tests for a change in persistence. Journal of Time Series Analysis, 28, pp. 408-433.
 #'
@@ -38,23 +42,23 @@
 
 cusum_test<-function(x,trend=c("none","linear"),tau=0.2,type=c("LKT","SK"),m=0,simu=0,M=10000)
 {
-  trend<-trend[1]
-  type<-type[1]
-  if ((trend %in% c("none","linear")) == FALSE)
-    stop("trend must be one of none, linear. See details.")
-  if ((type %in% c("LKT","SK")) == FALSE)
-    stop("type must be one of LKT, SK. See details.")
+  type<-match.arg(type,c("LKT","SK"))
+  trend<-match.arg(trend,c("none","linear"))
+  if(tau<=0 | tau>=0.5)
+    stop("It must hold that 0<tau<0.5")
   if (any(is.na(x)))
-    stop("missing values not allowed in time series")
+    stop("x contains missing values")
   if (mode(x) %in% ("numeric") == FALSE | is.vector(x)==FALSE)
-    stop("x must be a univariate numeric time series")
+    stop("x must be a univariate numeric vector")
   T<-length(x)
   f<-as.numeric(trend=="linear") + as.numeric(m>3)*(m-3)
   if ((T*tau)<=(f+1))
     stop("increase T*tau to guarantee that the test statistic can be calculated")
+  if(tau!=0.2 & simu==0)
+    warning("Note that the critical values stated are not valid for a tau different from 0.2")
   if(type=="SK"){
-    d<-fdGPH(x,.8)$d
-    if(fdGPH(x,.8)$d<.5){
+    d<-fracdiff::fdGPH(x,.8)$d
+    if(d<.5){
       x<-cumsum(x)
       d<-d+1
     }
@@ -69,7 +73,7 @@ cusum_test<-function(x,trend=c("none","linear"),tau=0.2,type=c("LKT","SK"),m=0,s
     if(T<50) Crit<-Crit[1,]
     if(T>500) Crit<-Crit[5,]
     if(T>49 & T<501){
-      if(min(abs(as.numeric(rownames(Crit))-T))==0){Crit<-Crit[min(rank(abs(as.numeric(rownames(Crit))-T))),]}
+      if(min(abs(as.numeric(rownames(Crit))-T))==0){Crit<-Crit[which.min(rank(abs(as.numeric(rownames(Crit))-T))),]}
       else{
         Tdif<-as.numeric(rownames(Crit))-T
         if(Tdif[which.min(abs(Tdif))]<0){
@@ -86,6 +90,7 @@ cusum_test<-function(x,trend=c("none","linear"),tau=0.2,type=c("LKT","SK"),m=0,s
       }
     }
     Crit<-matrix(Crit,ncol=2,nrow=3)
+    Crit[,2]<-rev(Crit[,2])
   }
   if(simu==0 & type=="SK"){
     dmat<-matrix(nrow=1,ncol=10)
@@ -94,7 +99,8 @@ cusum_test<-function(x,trend=c("none","linear"),tau=0.2,type=c("LKT","SK"),m=0,s
     if(trend=="linear") Crit<-cbind(getCV()$respcurve[7:9,]%*%t(dmat),rev(getCV()$respcurve[10:12,]%*%t(dmat)))
   }
   result<-cbind(t(Crit),t_stats)
-  colnames(result)<-c("99%","95%","90%","Teststatistic")
+  for(i in 1:2) result[i,1:3]=rev(result[i,1:3])
+  colnames(result)<-c("90%","95%","99%","Teststatistic")
   rownames(result)<-c("Lower","Upper")
   return(result)
 }
@@ -107,14 +113,15 @@ cusum<-function(x,trend,m=0,tau)
   T<-length(x)
   Ttau<-(floor(T*tau)):(ceiling(T*(1-tau)))
   q<-1
-  if(trend=="none"){p<-0}else{p<-1}
+  if(trend=="none"){p<-0}
+  else{p<-1}
   T1<-rep(NA,length(Ttau))
   T2<-rep(NA,length(Ttau))
   for(i in Ttau)
   {
     tr<-(1:i)^p
-    resi_1<-lm(x[1:i]~tr)$residuals
-    resi_2<-lm(rev(x)[1:i]~tr)$residuals
+    resi_1<-stats::lm(x[1:i]~tr)$residuals
+    resi_2<-stats::lm(rev(x)[1:i]~tr)$residuals
     if(m>0){
       index <- 1:m
       cov_1<- sapply(index, function(x) t(diff(resi_1[-c(1:x)])) %*%

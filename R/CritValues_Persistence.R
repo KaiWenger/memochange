@@ -188,10 +188,11 @@ return(Critical_values)
 
 #' function to generate critical values. For internal use only.
 #' @keywords internal
-CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
+CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,serial=FALSE,lmax=0){
+  T<-length(x)
   if(trend=="linear"){
     index<-1:T
-    trend_coef<-coef(lm(x~index))[2]
+    trend_coef<-stats::coef(stats::lm(x~index))[2]
     tre<-index*trend_coef}
   else{tre<-0}
   if(type=="LT" | type=="BT" | type=="HLT" | type=="HLTmin"){
@@ -200,7 +201,7 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
     M_M<-rep(NA,M)
     if(statistic=="mean"){
       for(l in 1:M){
-        tstat_sim<-BT(rnorm(length(x))+tre,trend=trend,tau=tau)
+        tstat_sim<-BT(stats::rnorm(length(x))+tre,trend=trend,tau=tau)
         M_N[l]<-mean(tstat_sim)
         M_R[l]<-mean(1/tstat_sim)
         M_M[l]<-max(M_N[l],M_R[l])
@@ -208,7 +209,7 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
     }
     if(statistic=="max"){
       for(l in 1:M){
-        tstat_sim<-BT(rnorm(length(x))+tre,trend=trend,tau=tau)
+        tstat_sim<-BT(stats::rnorm(length(x))+tre,trend=trend,tau=tau)
         M_N[l]<-max(tstat_sim)
         M_R[l]<-max(1/tstat_sim)
         M_M[l]<-max(M_N[l],M_R[l])
@@ -216,23 +217,23 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
     }
     if(statistic=="exp"){
       for(l in 1:M){
-        tstat_sim<-BT(rnorm(length(x))+tre,trend=trend,tau=tau)
+        tstat_sim<-BT(stats::rnorm(length(x))+tre,trend=trend,tau=tau)
         M_N[l]<-log(mean(exp(.5*tstat_sim)))
         M_R[l]<-log(mean(exp(.5/tstat_sim)))
         M_M[l]<-max(M_N[l],M_R[l])
       }
     }
-    crit<-matrix(c(quantile(M_N,c(0.9,.95,.99)),quantile(M_R,c(0.9,.95,.99)),quantile(M_M,c(0.9,.95,.99))),nrow=3,ncol=3,byrow=TRUE)
+    crit<-matrix(c(stats::quantile(M_N,c(0.9,.95,.99)),stats::quantile(M_R,c(0.9,.95,.99)),stats::quantile(M_M,c(0.9,.95,.99))),nrow=3,ncol=3,byrow=TRUE)
   }
   if(type=="cusum"){
     tstat_sim<-rep(NA,M)
-    for(l in 1:M){tstat_sim[l]<-cusum(cumsum(rnorm(length(x)))+tre,trend=trend,tau=tau,m=m)$tstat}
-    crit<-matrix(c(quantile(tstat_sim,c(0.01,0.05,0.1,.99,.95,.9))),ncol=2,nrow=3)
+    for(l in 1:M){tstat_sim[l]<-cusum(cumsum(stats::rnorm(length(x)))+tre,trend=trend,tau=tau,m=m)$tstat}
+    crit<-matrix(c(stats::quantile(tstat_sim,c(0.01,0.05,0.1,.99,.95,.9))),ncol=2,nrow=3)
   }
   if(type=="cusum_SK"){
     tstat_sim<-rep(NA,M)
-    for(l in 1:M){tstat_sim[l]<-cusum(FI.sim(length(x),1,0,d)+tre,trend=trend,tau=tau,m=m)$tstat}
-    crit<-matrix(c(quantile(tstat_sim,c(0.01,0.05,0.1,.99,.95,.9))),ncol=2,nrow=3)
+    for(l in 1:M){tstat_sim[l]<-cusum(LongMemoryTS::FI.sim(length(x),1,0,d)+tre,trend=trend,tau=tau,m=m)$tstat}
+    crit<-matrix(c(stats::quantile(tstat_sim,c(0.01,0.05,0.1,.99,.95,.9))),ncol=2,nrow=3)
   }
   if(type=="MR"){
     tstat_sim<-rep(NA,M)
@@ -241,7 +242,7 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
     M_M<-rep(NA,M)
     if(statistic=="standard"){
       for(l in 1:M){
-        tstat_sim<-MR(FI.sim(length(x),1,0,d)+tre,trend=trend,tau=tau,p=p,twostep=twostep)
+        tstat_sim<-MR(LongMemoryTS::FI.sim(length(x),1,0,d)+tre,trend=trend,tau=tau,serial=serial)
         M_N[l]<-min(tstat_sim$tstat1)
         M_R[l]<-min(tstat_sim$tstat2)
         M_M[l]<-min(M_N[l],M_R[l])
@@ -249,14 +250,14 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
     }
     else{
       for(l in 1:M){
-        tstat_sim<-MR(FI.sim(length(x),1,0,d)+tre,trend=trend,tau=tau,p=p,twostep=twostep)
+        tstat_sim<-MR(LongMemoryTS::FI.sim(length(x),1,0,d)+tre,trend=trend,tau=tau,serial=serial)
         M_N[l]<-max(tstat_sim$tstat1^2)
         M_R[l]<-max(tstat_sim$tstat2^2)
         M_M[l]<-max(M_N[l],M_R[l])
       }
     }
-    if(statistic=="standard") crit<-matrix(c(quantile(M_N,c(0.01,.05,.1)),quantile(M_R,c(0.01,.05,.1)),quantile(M_M,c(0.01,.05,.1))),nrow=3,ncol=3,byrow=TRUE)
-    if(statistic=="squared") crit<-matrix(c(quantile(M_N,c(0.9,.95,.99)),quantile(M_R,c(0.9,.95,.99)),quantile(M_M,c(0.9,.95,.99))),nrow=3,ncol=3,byrow=TRUE)
+    if(statistic=="standard") crit<-matrix(c(stats::quantile(M_N,c(0.01,.05,.1)),stats::quantile(M_R,c(0.01,.05,.1)),stats::quantile(M_M,c(0.01,.05,.1))),nrow=3,ncol=3,byrow=TRUE)
+    if(statistic=="squared") crit<-matrix(c(stats::quantile(M_N,c(0.9,.95,.99)),stats::quantile(M_R,c(0.9,.95,.99)),stats::quantile(M_M,c(0.9,.95,.99))),nrow=3,ncol=3,byrow=TRUE)
   }
   if(type=="LBI")
   {
@@ -265,7 +266,7 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
     M_M<-rep(NA,M)
     if(statistic=="mean"){
       for(l in 1:M){
-        tstat_sim<-LBI(rnorm(length(x))+tre,trend=trend,tau=tau)
+        tstat_sim<-LBI(stats::rnorm(length(x))+tre,trend=trend,tau=tau)
         M_N[l]<-mean(tstat_sim$tstat1)
         M_R[l]<-mean(tstat_sim$tstat2)
         M_M[l]<-max(M_N[l],M_R[l])
@@ -273,7 +274,7 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
     }
     if(statistic=="exp"){
       for(l in 1:M){
-        tstat_sim<-LBI(rnorm(length(x))+tre,trend=trend,tau=tau)
+        tstat_sim<-LBI(stats::rnorm(length(x))+tre,trend=trend,tau=tau)
         M_N[l]<-log(mean(exp(.5*tstat_sim$tstat1)))
         M_R[l]<-log(mean(exp(.5*tstat_sim$tstat2)))
         M_M[l]<-max(M_N[l],M_R[l])
@@ -281,52 +282,52 @@ CV<-function(x,statistic,trend,type,m=0,M,d=0,tau,p=0,twostep=FALSE){
     }
     if(statistic=="max"){
       for(l in 1:M){
-        tstat_sim<-LBI(rnorm(length(x))+tre,trend=trend,tau=tau)
+        tstat_sim<-LBI(stats::rnorm(length(x))+tre,trend=trend,tau=tau)
         M_N[l]<-max(tstat_sim$tstat1)
         M_R[l]<-max(tstat_sim$tstat2)
         M_M[l]<-max(M_N[l],M_R[l])
       }
     }
-    crit<-matrix(c(quantile(M_N,c(0.9,.95,.99)),quantile(M_R,c(0.9,.95,.99)),quantile(M_M,c(0.9,.95,.99))),nrow=3,ncol=3,byrow=TRUE)
+    crit<-matrix(c(stats::quantile(M_N,c(0.9,.95,.99)),stats::quantile(M_R,c(0.9,.95,.99)),stats::quantile(M_M,c(0.9,.95,.99))),nrow=3,ncol=3,byrow=TRUE)
   }
-#  if(type=="NM")
-#  {
-#    M_N<-rep(NA,M)
-#    M_R<-rep(NA,M)
-#    if(statistic=="mean"){
-#      for(l in 1:M){
-#        tstat_sim<-NM(rnorm(length(x)),trend=trend,tau=tau)
-#        M_N[l]<-mean(tstat_sim$tstat1)
-#        M_R[l]<-mean(tstat_sim$tstat2)
-#      }
-#    }
-#    if(statistic=="exp"){
-#      for(l in 1:M){
-#        tstat_sim<-NM(rnorm(length(x)),trend=trend,tau=tau)
-#        M_N[l]<-log(mean(exp(.5*tstat_sim$tstat1)))
-#        M_R[l]<-log(mean(exp(.5*tstat_sim$tstat2)))
-#      }
-#    }
-#    if(statistic=="max"){
-#      for(l in 1:M){
-#        tstat_sim<-NM(rnorm(length(x)),trend=trend,m=m,tau=tau)
-#        M_N[l]<-max(tstat_sim$tstat1)
-#        M_R[l]<-max(tstat_sim$tstat2)
-#      }
-#    }
-#    crit<-matrix(c(quantile(M_N,c(0.9,.95,.99)),quantile(M_R,c(0.9,.95,.99))),nrow=2,ncol=3,byrow=TRUE)
-#  }
+  #  if(type=="NM")
+  #  {
+  #    M_N<-rep(NA,M)
+  #    M_R<-rep(NA,M)
+  #    if(statistic=="mean"){
+  #      for(l in 1:M){
+  #        tstat_sim<-NM(stats::rnorm(length(x)),trend=trend,tau=tau)
+  #        M_N[l]<-mean(tstat_sim$tstat1)
+  #        M_R[l]<-mean(tstat_sim$tstat2)
+  #      }
+  #    }
+  #    if(statistic=="exp"){
+  #      for(l in 1:M){
+  #        tstat_sim<-NM(stats::rnorm(length(x)),trend=trend,tau=tau)
+  #        M_N[l]<-log(mean(exp(.5*tstat_sim$tstat1)))
+  #        M_R[l]<-log(mean(exp(.5*tstat_sim$tstat2)))
+  #      }
+  #    }
+  #    if(statistic=="max"){
+  #      for(l in 1:M){
+  #        tstat_sim<-NM(stats::rnorm(length(x)),trend=trend,m=m,tau=tau)
+  #        M_N[l]<-max(tstat_sim$tstat1)
+  #        M_R[l]<-max(tstat_sim$tstat2)
+  #      }
+  #    }
+  #    crit<-matrix(c(stats::quantile(M_N,c(0.9,.95,.99)),stats::quantile(M_R,c(0.9,.95,.99))),nrow=2,ncol=3,byrow=TRUE)
+  #  }
   if(type=="LKSN"){
     M_N<-rep(NA,M)
     M_R<-rep(NA,M)
     M_M<-rep(NA,M)
     for(l in 1:M){
-      tstat_sim<-LKSN(cumsum(rnorm(length(x)))+tre,trend=trend,tau=tau)
+      tstat_sim<-LKSN(cumsum(stats::rnorm(length(x)))+tre,trend=trend,tau=tau,lmax=lmax)
       M_N[l]<-min(tstat_sim$tstat1)
       M_R[l]<-min(tstat_sim$tstat2)
       M_M[l]<-min(M_N[l],M_R[l])
     }
-    crit<-matrix(c(quantile(M_N,c(0.1,.05)),quantile(M_R,c(0.1,.05)),quantile(M_M,c(0.1,.05))),nrow=3,ncol=2,byrow=TRUE)
+    crit<-matrix(c(stats::quantile(M_N,c(0.1,.05)),stats::quantile(M_R,c(0.1,.05)),stats::quantile(M_M,c(0.1,.05))),nrow=3,ncol=2,byrow=TRUE)
   }
   return(crit)
 }

@@ -14,24 +14,30 @@
 #' It should be noted, however, that only the critical values are identical, the distribution is highly irregular.
 #'
 #' The critical values of the tests vary with the sample size. If \code{simu=0}, the critical values provided
-#' are based on linear interpolation of the critical values simulated by Harvey, Leybourne, and Taylor (2006). These are based on \code{tau=0.2}. If \code{simu=1},
-#' the critical values are simulated based on the given setup using M replications. Caution, for large M this might take a while,
-#' small M, however, make the results unreliable.
-#'
-#' @param x the univariate numeric time series to be investigated.
-#' @param trend whether the time series exhibits a trend, \code{none} implies no trend and \code{linear} implies a linear trend.
-#' @param tau the function tests in the interval \code{[T*tau,T*(1-tau)]} for a break in persistence with T being the length of the time series. It must hold that \code{0<tau<0.5}, default is \code{tau=0.2} as commonly used in the literature.
-#' @param type which type of ratio test should be performed, \code{BT} for the standard ratio test by Busetti and Taylor (2004), \code{LT} for the modified ratio test by Leybourne and Taylor (2004), and \code{HLT} respectively \code{HLTmin} are the modified tests by Harvey, Leybourne, and Taylor (2006). See details.
-#' @param statistic which type of test statistic should be used, \code{mean} corresponds to Hansen's (1991) mean score, \code{max} to Andrews' (1993) maximum statistic, and \code{exp} to Andrews and Ploberger's (1994) mean-exponential statistic
-#' @param m Number of covariances used for the estimation of the long run variance if \code{LT} is considered. Default is \code{m=0}.
-#' @param z Number of polynomials used if \code{HLT} or \code{HLTmin} are considered. Default is \code{z=9}.
+#' are based on linear interpolation of the critical values simulated by Harvey, Leybourne, and Taylor (2006). These are, however, only valid for \code{tau=0.2}, \code{m=0}, and \code{z=9}. 
+#' In case that non-default values are chosen for \code{tau}, \code{m}, or \code{z}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. Caution, for M=10,000 this takes at least thirty minutes, depending on the length of the time series.
+#' Smaller M, however, make the results unreliable.
+#' 
+#' @param x the univariate numeric vector to be investigated. Missing values are not allowed.
+#' @param trend whether the time series exhibits a trend, \code{"none"} implies no trend and \code{"linear"} implies a linear trend.
+#' @param tau the function tests in the interval \code{[T*tau,T*(1-tau)]} for a break in persistence with T being the length of the time series. It must hold that \code{0<tau<0.5}, default is \code{tau=0.2} as commonly used in the literature. Note that if \code{type="BT"} or \code{type="HLT"} and \code{T*tau<= 1 + as.numeric(trend=="linear")}, \code{type="LT"} and \code{T*tau<=1+ as.numeric(trend=="linear") + (m>3)*(m-3)}, or \code{type="HLT"} and \code{T*tau<=(z+1)} the test statistic cannot be calculated.
+#' @param type which type of ratio test should be performed, \code{"BT"} for the standard ratio test by Busetti and Taylor (2004), \code{"LT"} for the modified ratio test by Leybourne and Taylor (2004), and \code{"HLT"}" respectively \code{"HLTmin"} are the modified tests by Harvey, Leybourne, and Taylor (2006). See details.
+#' @param statistic which type of test statistic should be used, \code{"mean"} corresponds to Hansen's (1991) mean score, \code{"max"} to Andrews' (1993) maximum statistic, and \code{"exp"} to Andrews and Ploberger's (1994) mean-exponential statistic
+#' @param m Number of covariances used for the estimation of the long run variance if \code{statistic=LT} is used. Default is \code{m=0}.
+#' @param z Number of polynomials used if \code{"HLT"} or \code{"HLTmin"} are considered. Default is \code{z=9}.
 #' @param simu whether critical values should be simulated or interpolated, \code{simu=1} means simulation, \code{simu=0} means interpolation based on critical values for \code{tau=0.2}. See details. Default is \code{simu=0}.
 #' @param M number of replications in case critical values should be simulated. Default is \code{M=10000}.
 #' @return Returns a matrix that consists of test statistic and critical values (corresponding to \code{alpha=0.1,0.05,0.01}) for testing against a change from I(1) to I(0), I(0) to I(1), and against a change in an unknown direction.
+#' @seealso \code{\link{cusum_test}}, \code{\link{LBI_test}}, \code{\link{LKSN_test}}, \code{\link{MR_test}}.
 #' @author Janis Becker
 #' @examples
-#' series<- c(rnorm(200),cumsum(rnorm(200)))
-#' ratio_test(series,trend="none",type="BT",statistic="mean")
+#' set.seed(410)
+#' 
+#' # generate dummy-data
+#' series <- c(rnorm(200), cumsum(rnorm(200))) 
+#' 
+#' # test for a break in persistence
+#' ratio_test(series)
 #' @references
 #' Busetti, F. and Taylor, R. (2004): Tests of stationarity against a change in persistence. Journal of Econometrics, 123, pp. 33-66.
 #'
@@ -42,19 +48,15 @@
 
 ratio_test<-function(x,trend=c("none","linear"),tau=0.2,statistic=c("mean","max","exp"),type=c("BT","LT","HLT","HLTmin"),m=0,z=9,simu=0,M=10000)
 {
-  statistic<-statistic[1]
-  trend<-trend[1]
-  type<-type[1]
-  if ((statistic %in% c("mean","max","exp")) == FALSE)
-    stop("statistic must be one of mean, max, exp. See details.")
-  if ((trend %in% c("none","linear")) == FALSE)
-    stop("trend must be one of none, linear. See details.")
-  if ((type %in% c("BT","LT","HLT","HLTmin")) == FALSE)
-    stop("type must be one of BT, LT, HLT, HLTmin. See details.")
+  statistic<-match.arg(statistic,c("mean","max","exp"))
+  trend<-match.arg(trend,c("none","linear"))
+  type<-match.arg(type,c("BT","LT","HLT","HLTmin"))
+  if(tau<=0 | tau>=0.5)
+    stop("It must hold that 0<tau<0.5")
   if (any(is.na(x)))
-    stop("missing values not allowed in time series")
+    stop("x contains missing values")
   if (mode(x) %in% ("numeric") == FALSE | is.vector(x)==FALSE)
-    stop("x must be a univariate numeric time series")
+    stop("x must be a univariate numeric vector")
   T<-length(x)
   f<-as.numeric(trend=="linear")
   if ((T*tau)<=(1+f) & type%in% c("BT","HLT"))
@@ -63,6 +65,8 @@ ratio_test<-function(x,trend=c("none","linear"),tau=0.2,statistic=c("mean","max"
     stop("increase T*tau to guarantee that the test statistic can be calculated")
   if ((T*tau)<=(z+1) & type%in% c("HLTmin"))
     stop("increase T*tau to guarantee that the test statistic can be calculated")
+  if(tau!=0.2 & simu==0)
+    warning("Note that the critical values stated are not valid for a tau different from 0.2")
   #calculate sequence of test statistics
   if(type=="LT") stat<-LT(x=x,trend=trend,m=m,tau=tau)
   if(type=="BT") stat<-BT(x=x,trend=trend,tau=tau)
@@ -165,8 +169,8 @@ BT<-function(x,trend,tau)
   {
     trend_1<-(1:i)^p
     trend_2<-((i+1):T)^p
-    resi_1<-lm(x[1:i]~trend_1)$residuals
-    resi_2<-lm(x[(i+1):T]~trend_2)$residuals
+    resi_1<-stats::lm(x[1:i]~trend_1)$residuals
+    resi_2<-stats::lm(x[(i+1):T]~trend_2)$residuals
     tstat[q]<-(T-i)^(-2)*sum(cumsum(resi_2)^2)/(i^(-2)*sum(cumsum(resi_1)^2))
     q<-q+1
   }
@@ -186,8 +190,8 @@ LT<-function(x,trend,m,tau)
   {
     trend_1<-(1:i)^p
     trend_2<-((i+1):T)^p
-    resi_1<-lm(x[1:i]~trend_1)$residuals
-    resi_2<-lm(x[(i+1):T]~trend_2)$residuals
+    resi_1<-stats::lm(x[1:i]~trend_1)$residuals
+    resi_2<-stats::lm(x[(i+1):T]~trend_2)$residuals
     if(m>0){
       index <- 1:m
       cov_1<- sapply(index, function(x) t(resi_1[-c(1:x)]) %*%
@@ -219,7 +223,7 @@ wald_test<-function(Sigma, b, Terms)
   V <- Sigma
   mat <- qr.solve(L %*% V %*% t(L),tol=1e-100)
   stat <- t(f - H0) %*% mat %*% (f - H0)
-  p <- 1 - pchisq(stat, df = w)
+  p <- 1 - stats::pchisq(stat, df = w)
   res <- list(chi2 = c(chi2 = stat, df = w, P = p))
   structure(list(Sigma = Sigma, b = b, Terms = Terms, H0 = H0,
                  L = L, result = res), class = "wald.test")
@@ -231,9 +235,9 @@ HLT<-function(x,trend,z)
 {
   T<-length(x)
   tr<-matrix(nrow=T,ncol=z);for(f in 1:z){tr[,f]<-(1:T)^f}
-  model<-lm(x~tr)
+  model<-stats::lm(x~tr)
   if(trend=="none"){p<-0}else{p<-1}
-  WT<-wald_test(vcov(model),coef(model),Terms=(p+2):(z+1))$result$chi2[1]
+  WT<-wald_test(stats::vcov(model),stats::coef(model),Terms=(p+2):(z+1))$result$chi2[1]
   return(WT/T)
 }
 
@@ -252,15 +256,15 @@ HLTmin<-function(x,trend,z,tau)
   {
     trend_1<-(1:i)^p
     trend_2<-((i+1):T)^p
-    resi_1<-lm(x[1:i]~trend_1)$residuals
-    resi_2<-lm(x[(i+1):T]~trend_2)$residuals
+    resi_1<-stats::lm(x[1:i]~trend_1)$residuals
+    resi_2<-stats::lm(x[(i+1):T]~trend_2)$residuals
     tstat[q]<-(T-i)^(-2)*sum(cumsum(resi_2)^2)/(i^(-2)*sum(cumsum(resi_1)^2))
     tr1<-matrix(nrow=i,ncol=z);for(f in 1:z){tr1[,f]<-(1:i)^f}
     tr2<-matrix(nrow=T-i,ncol=z);for(f in 1:z){tr2[,f]<-(1:(T-i))^f}
-    model1<-lm(x[1:i]~tr1)
-    model2<-lm(x[(i+1):T]~tr2)
-    WT1[q]<-wald_test(vcov(model1),coef(model1),Terms=(p+2):(z+1))$result$chi2[1]
-    WT2[q]<-wald_test(vcov(model2),coef(model2),Terms=(p+2):(z+1))$result$chi2[1]
+    model1<-stats::lm(x[1:i]~tr1)
+    model2<-stats::lm(x[(i+1):T]~tr2)
+    WT1[q]<-wald_test(stats::vcov(model1),stats::coef(model1),Terms=(p+2):(z+1))$result$chi2[1]
+    WT2[q]<-wald_test(stats::vcov(model2),stats::coef(model2),Terms=(p+2):(z+1))$result$chi2[1]
     q<-q+1
   }
   return(list(tstat=tstat,WT1=WT1/T,WT2=WT2/T))
