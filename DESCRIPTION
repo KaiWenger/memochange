@@ -1,7 +1,7 @@
 Package: memochange
 Title: Testing for Structural Breaks under Long Memory and Testing for Changes in Persistence
-Version: 1.0.1
-Date: 2019-09-24
+Version: 1.1.0
+Date: 2019-11-04
 Authors@R: c(person("Janis", "Becker", email = "janisbecker92@gmail.com", role = c("aut")), person("Kai", "Wenger", email = "kai.wenger@gmx.de", role = c("aut","cre")))
 Description: Test procedures and break point estimators for persistent processes that exhibit structural breaks in mean or in persistence.
     On the one hand the package contains the most popular approaches for testing whether a time series exhibits a break in persistence from I(0) to I(1) or vice versa, such as those of Busetti and Taylor (2004) and Leybourne, Kim, and Taylor (2007).
@@ -28,5 +28,10 @@ Depends: R (>= 3.4.0)
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Imports: urca, fracdiff, LongMemoryTS, sandwich, strucchange, longmemo, stats
+Imports: urca (>= 1.3.0), forecast (>= 8.6), fracdiff (>= 1.4.2), LongMemoryTS (>= 0.1.0), sandwich (>= 2.5.1), strucchange (>= 1.5.1), longmemo (>= 1.1.1), stats (>= 3.6.1)
 RoxygenNote: 6.1.1
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
