@@ -78,7 +78,7 @@ LKSN_test<-function(x,trend=c("none","linear"),tau=0.2,lmax=0,simu=0,M=10000)
 
 #' Unit root test by Elliot et al. (1996). For internal use only
 #' @keywords internal
-ers_test=function (y, trend = c("constant", "trend"), lag.max = lmax,T) 
+ers_test=function (y, trend, lag.max,T) 
 {
   lag.max <- lag.max + 1
   nobs <- length(y)
@@ -131,8 +131,6 @@ LKSN<-function(x,trend,tau,lmax)
   if(trend=="linear"){
     for(i in Ttau)
     {
-      #T1[q]<-urca::ur.ers(x[1:i],model="trend")@teststat
-      #T2[q]<-urca::ur.ers(rev(x)[1:i],model="trend")@teststat
       T1[q]<-ers_test(x[1:i],trend="linear",T=T,lag.max=lmax)
       T2[q]<-ers_test(rev(x)[1:i],trend="linear",T=T,lag.max=lmax)
       q<-q+1
@@ -141,8 +139,6 @@ LKSN<-function(x,trend,tau,lmax)
   else{
     for(i in Ttau)
     {
-      #T1[q]<-urca::ur.ers(x[1:i])@teststat
-      #T2[q]<-urca::ur.ers(rev(x)[1:i])@teststat
       T1[q]<-ers_test(x[1:i],trend="none",T=T,lag.max=lmax)
       T2[q]<-ers_test(rev(x)[1:i],trend="none",T=T,lag.max=lmax)
       q<-q+1
