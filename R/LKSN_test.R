@@ -106,13 +106,13 @@ ers_test=function (y, trend, lag.max,T)
                                                   1))], yd.l[-(1:(lag.max - 1))], yd.dlags))
     colnames(data.dfgls) <- c("yd.diff", "yd.lag", paste("yd.diff.lag", 
                                                          1:(lag.max - 1), sep = ""))
-    dfgls.form <- formula(paste("yd.diff ~ -1 + ", paste(colnames(data.dfgls)[-1], 
+    dfgls.form <- stats::formula(paste("yd.diff ~ -1 + ", paste(colnames(data.dfgls)[-1], 
                                                          collapse = " + ")))
   }
   else if (lag.max <= 1) {
     data.dfgls <- data.frame(cbind(yd.diff, yd.l))
     colnames(data.dfgls) <- c("yd.diff", "yd.lag")
-    dfgls.form <- formula("yd.diff ~ -1 + yd.lag")
+    dfgls.form <- stats::formula("yd.diff ~ -1 + yd.lag")
   }
   dfgls.reg <- summary(stats::lm(dfgls.form, data = data.dfgls))
   teststat <- stats::coef(dfgls.reg)[1, 3]
