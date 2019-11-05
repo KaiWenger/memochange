@@ -31,7 +31,7 @@ Under the null hypothesis the time series is nonstationary throughout and under 
 }
 \details{
 Leybourne, Taylor, and Kim (2006) introduced a cusum-type test that is able to identify when time series
-exhibit changes in persistence.. Under the null
+exhibit changes in persistence. Under the null
 hypothesis, the series is throughout I(1), i.e. nonstationary. Under the alternative the series exhibits a
 break either from I(0) to I(1) or vice versa. Sibbertsen and Kruse (2009) extended the test such that under the null hypothesis
 the time series is I(d) throughout, with d>1/2 and under the alternative a change from I(d1) to I(d2), where d1<1/2 and 1/2<d2<3/2, or vice versa has occured.
@@ -42,8 +42,9 @@ To determine the order of integration (the memory parameter d) the semiparametri
 The critical values of the tests vary with sample size and d. If \code{simu=0}, the critical values provided
 are based on linear interpolation of the critical values simulated by Leybourne, Taylor, and Kim (2006) respectively the response curves by Sibbertsen and Kruse (2009).
 These are, however, only valid for \code{tau=0.2} and \code{m=0}. 
-In case that non-default values are chosen for \code{tau} or \code{m}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. Caution, for M=10,000 this takes at least thirty minutes, depending on the length of the time series.
-Smaller M, however, make the results unreliable.
+In case that non-default values are chosen for \code{tau} or \code{m}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. 
+Caution, for a time series of length \code{T=100} and \code{M=10,000} replications this takes approximately thirty minutes with increasing duration for higher T or M.  
+It should be noted, however, that M smaller than 10,000 make the results unreliable.
 }
 \examples{
 set.seed(410)

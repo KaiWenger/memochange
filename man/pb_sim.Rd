@@ -4,7 +4,7 @@
 \alias{pb_sim}
 \title{Simulates persistence-break process}
 \usage{
-pb_sim(T, tau, trend = c("none", "linear"), tp = 1, d1, d2, mean, var)
+pb_sim(T, tau, trend = c("none", "linear"), tp = 0, d1, d2, mean, var)
 }
 \arguments{
 \item{T}{length of the time series.}

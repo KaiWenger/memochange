@@ -34,8 +34,9 @@ an increase or a decrease of the memory parameter has occured over time.
 \details{
 The critical values of the tests vary with sample size and memory parameter d. If \code{simu=0}, the critical values provided
 are based on linear interpolation of the critical values simulated by Martins and Rodrigues (2014). These are, however, only valid for \code{tau=0.2} and \code{serial=FALSE}. 
-In case that non-default values are chosen for \code{tau} or \code{serial}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. Caution, for M=10,000 this takes at least thirty minutes, depending on the length of the time series.
-Smaller M, however, make the results unreliable.
+In case that non-default values are chosen for \code{tau} or \code{serial}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. 
+Caution, for a time series of length \code{T=750} and \code{M=10,000} replications this takes approximately twelve hours with increasing duration for higher T or M.  
+It should be noted, however, that M smaller than 10,000 make the results unreliable.
 }
 \examples{
 set.seed(410)
@@ -44,7 +45,7 @@ set.seed(410)
 series <- c(rnorm(200), cumsum(rnorm(200)))
 
 # test for a break in persistence
-MR_test(series, trend="none", statistic="standard")
+MR_test(series, trend="none", statistic="squared")
 }
 \references{
 Martins, L.. and Rodrigues, P. (2014): Testing for persistence change in fractionally integrated models: An application to world inflation rates. Computational Statistics and Data Analysis, 76, pp. 502-522.

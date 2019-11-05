@@ -5,8 +5,8 @@
 \title{Breakpoint estimators for a change in persistence}
 \usage{
 BP_estim(x, trend = c("none", "linear"), tau = 0.2, type = c("BT",
-  "LKT", "LKSN", "MR"), direction = c("01", "10"), d_estim = c("GPH",
-  "ELW"), d_bw = 0.7, m = 0, serial = c(FALSE, TRUE))
+  "LKT", "LKSN", "MR"), direction = c("01", "10"), d_estim = c("ELW",
+  "GPH"), d_bw = 0.7, m = 0, serial = c(FALSE, TRUE))
 }
 \arguments{
 \item{x}{the univariate numeric vector to be investigated. Missing values are not allowed.}

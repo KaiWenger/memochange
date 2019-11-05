@@ -43,8 +43,8 @@ d_est    <- LongMemoryTS::local.W(tseries, m=floor(1+T^0.65))$d
 d_est2   <- LongMemoryTS::local.W(tseries2, m=floor(1+T^0.65))$d
 
 # perform the test on both time series
-snwilcoxon(tseries, d=d_est)
-snwilcoxon(tseries2, d=d_est2)
+snsupwald(tseries, d=d_est)
+snsupwald(tseries2, d=d_est2)
 # For the series with no change in mean the test does not reject the null hypothesis of a constant mean across time at any reasonable significance level.
 # For the series with a change in mean the test rejects the null hypothesis at a 1\% significance level.
 }

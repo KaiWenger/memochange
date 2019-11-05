@@ -14,7 +14,7 @@ On the other hand, the package contains the most popular approaches to test for 
 These include memory robust versions of the CUSUM, sup-Wald, and Wilcoxon type tests. The tests either utilize consistent estimates of the long-run variance or a self normalization approach in their test statistics.
 }
 \details{
-For details see the readme and vignettes in the corresponding GitHub repository (https://github.com/KaiWenger/memochange)
+For details see the readme and vignettes in the corresponding GitHub repository (https://github.com/KaiWenger/memochange).
 }
 \references{
 Andrews, D. W. K. (1993): Tests for Parameter Instability and Structural Change With Unknown Change Point. Econometrica, 61, pp. 821-856.

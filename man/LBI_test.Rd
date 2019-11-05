@@ -30,9 +30,9 @@ under the alternative a change from either I(1) to I(0) or I(0) to I(1) has occu
 \details{
 The critical values of the tests vary with the sample size. If \code{simu=0}, the critical values provided
 are based on linear interpolation of the critical values simulated by Busetti and Taylor (2004). These are, however, only valid for \code{tau=0.2}. 
-In case that a non-default value is chosen for \code{tau}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications.
-Caution, for M=10,000 this takes at least five minutes, depending on the length of the time series.
-Smaller M, however, make the results unreliable.
+In case that another value is chosen for \code{tau}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications.
+For a time series of length \code{T=100} and \code{M=10,000} replications this takes approximately five minutes with increasing duration for higher T or M.  
+It should be noted, however, that M smaller than 10,000 make the results unreliable.
 }
 \examples{
 set.seed(410)
