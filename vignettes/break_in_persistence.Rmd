@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 The `memochange` package can be used for two things: Checking for a break in persistence and checking for a change in mean. This vignette presents the functions related to a break in persistence. This includes `BP_estim`, `cusum_test`, `LBI_test`, `LKSN_test`, `MR_test`, `ratio_test`, and `pb_sim`. Before considering the usage of these functions, a brief literature review elaborates on their connection.
 
-##Literature Review
+## Literature Review
 The degree of memory is an important determinant of the characteristics of a time series. For an $I(0)$, or short-memory, process (e.g., AR(1) or ARMA(1,1)), the impact of shocks is short-lived and dies out quickly. On the other hand, for an $I(1)$, or difference-stationary, process such as the random walk, shocks persist infinitely. Thus, any change in a variable will have an impact on all future realizations. For an $I(d)$, or long-memory, process with $0<d<1$, shocks neither die out quickly nor persist infinitely, but have a hyperbolically decaying impact. In this case, the current value of a variable depends on past shocks, but the less so the further these shocks are past.
 
 There are plenty of procedures to determine the memory of a series (see @robinson1995gaussian, @shimotsu2010exact, among others). However, there is also the possibility that series exhibit a structural change in memory, often referred to as a change in persistence. Starting with @kim2000detection various procedures have been proposed to detect these changes and consistently estimate the change point. @busetti2004tests and @leybourne2004tests suggest approaches for testing the null of constant I(0) behaviour of the series against the alternative that a change from either $I(0)$ to $I(1)$ or $I(1)$ to $I(0)$ occurred. However, both approaches show serious distortions if neither the null nor the alternative is true, i.e. the series is constant $I(1)$. In this case the procedures by @leybourne2003tests and @leybourne2007cusum can be applied as they have the same alternative, but assume constant $I(1)$ behaviour under the null. Again, the procedures exhibit distortions when neither the null nor the alternative is true. To remedy this issue, @harvey2006modified suggest an approach that entails the same critical values for constant $I(0)$ and constant $I(1)$ behavior. Consequently, it accommodates both, constant $I(0)$ and constant $I(1)$ behavior under the null.
@@ -29,7 +29,7 @@ While this earlier work focussed on the $I(0)/I(1)$ framework, more recent appro
 
 Examples for series that potentially exhibit breaks in persistence are macroeconomic and financial time series such as inflation rates, trading volume, interest rates, volatilities and so on. For these series it is therefore strongly recommended to investigate the possibility of a break in persistence before modeling and forecasting the series.
 
-##Usage
+## Usage
 The `memochange` package contains all procedure mentioned above to identify whether a time series exhibits a break in persistence mentioned above. Additionally, several estimators are implemented which consistently estimate the point at which the series exhibits a break in persistence and the order of integration in the two regimes.
 We will now show how the usage of the implemented procedures while investigating the price of crude oil.
 
@@ -144,4 +144,4 @@ BP_estim(x, direction="01", d_bw=0.65)
 
 In our setup, it can be seen that increasing `d_bw` to 0.75 does not severely change the estimated order of integration in the two regimes. Decreasing `d_bw`, however, leads to smaller estimates of $d$.
 
-##References
+## References

@@ -13,7 +13,7 @@
 
 <meta name="author" content="Janis Becker" />
 
-<meta name="date" content="2019-11-04" />
+<meta name="date" content="2019-11-05" />
 
 <title>memochange-Tutorial: Break in Persistence</title>
 
@@ -96,7 +96,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">memochange-Tutorial: Break in Persistence</h1>
 <h4 class="author">Janis Becker</h4>
-<h4 class="date">2019-11-04</h4>
+<h4 class="date">2019-11-05</h4>
 
 
 
@@ -143,36 +143,36 @@ x &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(oil[,<span cl
 <p>Again the test results suggests that there is a break from <span class="math inline">\(I(0)\)</span> to <span class="math inline">\(I(1)\)</span>. Consequently, it is not a constant <span class="math inline">\(I(1)\)</span> process that led to a spurious rejection of the test by Busetti and Taylor (2004).</p>
 <p>Another test for a change in persistence is that by Martins and Rodrigues (2014). This is more general as it is not restricted to the <span class="math inline">\(I(0)/I(1)\)</span> framework, but can identify changes from <span class="math inline">\(I(d_1)\)</span> to <span class="math inline">\(I(d_2)\)</span> with <span class="math inline">\(d_1 \neq d_2\)</span> and <span class="math inline">\(-1/2&lt;d_1,d_2&lt;2\)</span>. The default version is applied by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MR_test</span>(x)
-<span class="co">#&gt;                                           90%       95%       99%</span>
-<span class="co">#&gt; Against increase in memory          -1.638729 -1.925646 -2.503650</span>
-<span class="co">#&gt; Against decrease in memory          -1.653875 -1.953697 -2.509242</span>
-<span class="co">#&gt; Against change in unknown direction -1.937915 -2.210129 -2.726981</span>
+<span class="co">#&gt;                                          90%      95%      99%</span>
+<span class="co">#&gt; Against increase in memory          4.270666 5.395201 8.233674</span>
+<span class="co">#&gt; Against decrease in memory          4.060476 5.087265 7.719128</span>
+<span class="co">#&gt; Against change in unknown direction 5.065695 6.217554 9.136441</span>
 <span class="co">#&gt;                                     Teststatistic</span>
-<span class="co">#&gt; Against increase in memory              -3.300664</span>
-<span class="co">#&gt; Against decrease in memory              -1.629719</span>
-<span class="co">#&gt; Against change in unknown direction     -3.300664</span></code></pre></div>
+<span class="co">#&gt; Against increase in memory               16.21494</span>
+<span class="co">#&gt; Against decrease in memory                2.14912</span>
+<span class="co">#&gt; Against change in unknown direction      16.21494</span></code></pre></div>
 <p>Again, the function returns a matrix consisting of test statistic and critical values. Here, the alternative of the test is an increase respectively a decrease in memory. In line with the results of the ratio test, the approach by Martins and Rodrigues (2014) suggests that the series exhibits an increase in memory, i.e. that the memory of the series increases from <span class="math inline">\(d_1\)</span> to <span class="math inline">\(d_2\)</span> with <span class="math inline">\(d_1&lt;d_2\)</span> at some point in time. Again, this also holds if we consider the critical values that account for the multiple testing problem.</p>
 <p>Similar to the ratio test and all other tests against a change in persistence in the <code>memochange</code> package, the MR test also has the same arguments <code>trend</code>, <code>tau</code>, <code>simu</code>, and <code>M</code>. Furthermore, we can choose again the type of test statistic. This time we can decide whether to use the squared t-statistic or the standard t-statistic.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MR_test</span>(x, <span class="dt">statistic=</span><span class="st">&quot;standard&quot;</span>)
 <span class="co">#&gt;                                           90%       95%       99%</span>
-<span class="co">#&gt; Against increase in memory          -1.638729 -1.925646 -2.503650</span>
-<span class="co">#&gt; Against decrease in memory          -1.653875 -1.953697 -2.509242</span>
-<span class="co">#&gt; Against change in unknown direction -1.937915 -2.210129 -2.726981</span>
+<span class="co">#&gt; Against increase in memory          -1.637306 -1.920434 -2.504862</span>
+<span class="co">#&gt; Against decrease in memory          -1.651586 -1.951420 -2.514165</span>
+<span class="co">#&gt; Against change in unknown direction -1.933137 -2.203370 -2.722017</span>
 <span class="co">#&gt;                                     Teststatistic</span>
-<span class="co">#&gt; Against increase in memory              -3.300664</span>
-<span class="co">#&gt; Against decrease in memory              -1.629719</span>
-<span class="co">#&gt; Against change in unknown direction     -3.300664</span></code></pre></div>
+<span class="co">#&gt; Against increase in memory              -2.880545</span>
+<span class="co">#&gt; Against decrease in memory              -1.277410</span>
+<span class="co">#&gt; Against change in unknown direction     -2.880545</span></code></pre></div>
 <p>As for the ratio test, changing the type of statistic has a rather small effect on the empirical performance of the test.</p>
 <p>If we believe that the underlying process exhibits additional short run components, we can account for these by setting <code>serial=TRUE</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">MR_test</span>(x, <span class="dt">serial=</span><span class="ot">TRUE</span>)
-<span class="co">#&gt;                                           90%       95%       99%</span>
-<span class="co">#&gt; Against increase in memory          -1.638729 -1.925646 -2.503650</span>
-<span class="co">#&gt; Against decrease in memory          -1.653875 -1.953697 -2.509242</span>
-<span class="co">#&gt; Against change in unknown direction -1.937915 -2.210129 -2.726981</span>
+<span class="co">#&gt;                                          90%      95%      99%</span>
+<span class="co">#&gt; Against increase in memory          4.270666 5.395201 8.233674</span>
+<span class="co">#&gt; Against decrease in memory          4.060476 5.087265 7.719128</span>
+<span class="co">#&gt; Against change in unknown direction 5.065695 6.217554 9.136441</span>
 <span class="co">#&gt;                                     Teststatistic</span>
-<span class="co">#&gt; Against increase in memory              -3.283153</span>
-<span class="co">#&gt; Against decrease in memory              -2.679188</span>
-<span class="co">#&gt; Against change in unknown direction     -3.283153</span></code></pre></div>
+<span class="co">#&gt; Against increase in memory              10.727202</span>
+<span class="co">#&gt; Against decrease in memory               6.758906</span>
+<span class="co">#&gt; Against change in unknown direction     10.727202</span></code></pre></div>
 <p>While the test statistic changes, the conclusion remains the same.</p>
 <p>All tests indicate that the oil price series exhibits an increase in memory over time. To correctly model and forecast the series, the exact location of the break is important. This can be estimated by the <code>BP_estim</code> function. It is important for the function that the direction of the change is correctly specified. In our case, an increase in memory has occurred so that we set <code>direction=&quot;01&quot;</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BP_estim</span>(x, <span class="dt">direction=</span><span class="st">&quot;01&quot;</span>)
@@ -180,16 +180,16 @@ x &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(oil[,<span cl
 <span class="co">#&gt; [1] 151</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $d_1</span>
-<span class="co">#&gt; [1] 0.855238</span>
+<span class="co">#&gt; [1] 0.8127501</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sd_1</span>
-<span class="co">#&gt; [1] 0.129834</span>
+<span class="co">#&gt; [1] 0.08574929</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $d_2</span>
-<span class="co">#&gt; [1] 1.034389</span>
+<span class="co">#&gt; [1] 1.088039</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sd_2</span>
-<span class="co">#&gt; [1] 0.1468516</span></code></pre></div>
+<span class="co">#&gt; [1] 0.07142857</span></code></pre></div>
 <p>This yields a list stating the location of the break (observation 151), semiparametric estimates of the order of integration in the two regimes (0.86 and 1.03) as well as the standard deviations of these estimates (0.13 and 0.15).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">oil$DATE[<span class="dv">151</span>]
 <span class="co">#&gt; [1] &quot;1998-07-01&quot;</span></code></pre></div>
@@ -200,16 +200,16 @@ x &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(oil[,<span cl
 <span class="co">#&gt; [1] 148</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $d_1</span>
-<span class="co">#&gt; [1] 0.7654911</span>
+<span class="co">#&gt; [1] 0.7660609</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sd_1</span>
-<span class="co">#&gt; [1] 0.1259972</span>
+<span class="co">#&gt; [1] 0.08703883</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $d_2</span>
-<span class="co">#&gt; [1] 0.9672149</span>
+<span class="co">#&gt; [1] 1.067404</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sd_2</span>
-<span class="co">#&gt; [1] 0.1196673</span></code></pre></div>
+<span class="co">#&gt; [1] 0.07142857</span></code></pre></div>
 <p>This yields a similar result with the break point lying in the year 1998 and d increasing from approximately 0.8 to approximately 1.</p>
 <p>All other arguments of the function (<code>trend</code>, <code>tau</code>, <code>serial</code>) were already discussed above except for <code>d_estim</code> and <code>d_bw</code>. These two arguments determine which estimator and bandwidth are used to estimate the order of integration in the two regimes. Concerning the estimator, the GPH (Geweke and Porter-Hudak (1983)) and the exact local Whittle estimator (Shimotsu and Phillips (2005)) can be selected. Although the exact local Whittle estimator has a lower variance, the GPH estimator is still often considered in empirical applications due to its simplicity. In our example the results of the two estimators are almost identical.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BP_estim</span>(x, <span class="dt">direction=</span><span class="st">&quot;01&quot;</span>, <span class="dt">d_estim=</span><span class="st">&quot;GPH&quot;</span>)
@@ -233,31 +233,31 @@ x &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(oil[,<span cl
 <span class="co">#&gt; [1] 151</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $d_1</span>
-<span class="co">#&gt; [1] 0.8422012</span>
+<span class="co">#&gt; [1] 0.9146951</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sd_1</span>
-<span class="co">#&gt; [1] 0.1089517</span>
+<span class="co">#&gt; [1] 0.07624929</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $d_2</span>
-<span class="co">#&gt; [1] 1.042382</span>
+<span class="co">#&gt; [1] 1.173524</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sd_2</span>
-<span class="co">#&gt; [1] 0.1149333</span>
+<span class="co">#&gt; [1] 0.0625</span>
 <span class="kw">BP_estim</span>(x, <span class="dt">direction=</span><span class="st">&quot;01&quot;</span>, <span class="dt">d_bw=</span><span class="fl">0.65</span>)
 <span class="co">#&gt; $Breakpoint</span>
 <span class="co">#&gt; [1] 151</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $d_1</span>
-<span class="co">#&gt; [1] 0.5477746</span>
+<span class="co">#&gt; [1] 0.5803242</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sd_1</span>
-<span class="co">#&gt; [1] 0.089527</span>
+<span class="co">#&gt; [1] 0.09805807</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $d_2</span>
-<span class="co">#&gt; [1] 0.8525081</span>
+<span class="co">#&gt; [1] 0.9353325</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sd_2</span>
-<span class="co">#&gt; [1] 0.1369818</span></code></pre></div>
+<span class="co">#&gt; [1] 0.08219949</span></code></pre></div>
 <p>In our setup, it can be seen that increasing <code>d_bw</code> to 0.75 does not severely change the estimated order of integration in the two regimes. Decreasing <code>d_bw</code>, however, leads to smaller estimates of <span class="math inline">\(d\)</span>.</p>
 </div>
 <div id="references" class="section level2 unnumbered">
