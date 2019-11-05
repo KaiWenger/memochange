@@ -4,7 +4,8 @@
 \alias{pb_sim}
 \title{Simulates persistence-break process}
 \usage{
-pb_sim(T, tau, trend = c("none", "linear"), tp = 0, d1, d2, mean, var)
+pb_sim(T, tau, trend = c("none", "linear"), tp = 0, d1, d2, mean = 0,
+  var = 1)
 }
 \arguments{
 \item{T}{length of the time series.}
@@ -19,9 +20,9 @@ pb_sim(T, tau, trend = c("none", "linear"), tp = 0, d1, d2, mean, var)
 
 \item{d2}{order of integration of the second part of the series.}
 
-\item{mean}{mean of the series.}
+\item{mean}{mean of the series. Default is \code{mean=0}.}
 
-\item{var}{variance of the innovations.}
+\item{var}{variance of the innovations. Default is \code{var=1}}
 }
 \value{
 Returns a vector containing the simulated time series.

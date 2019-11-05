@@ -4,7 +4,7 @@
 \alias{ers_test}
 \title{Unit root test by Elliot et al. (1996). For internal use only}
 \usage{
-ers_test(y, trend = c("constant", "trend"), lag.max = lmax, T)
+ers_test(y, trend, lag.max, T)
 }
 \description{
 Unit root test by Elliot et al. (1996). For internal use only
