@@ -1,0 +1,10 @@
+^README\.Rmd$
+^.*\.Rproj$
+^\.Rproj\.user$
+^cran-comments\.md$
+^\.travis\.yml$
+^paper$
+^Statement_of_Author_Contributions\.md$
+^vignettes$
+^contributing\.md
+^testing$
