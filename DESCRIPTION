@@ -33,5 +33,8 @@ RoxygenNote: 6.1.1
 Suggests: 
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    xts,
+    zoo,
+    data.table
 VignetteBuilder: knitr
