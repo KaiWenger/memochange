@@ -15,8 +15,9 @@
 #'
 #' The critical values of the tests vary with the sample size. If \code{simu=0}, the critical values provided
 #' are based on linear interpolation of the critical values simulated by Harvey, Leybourne, and Taylor (2006). These are, however, only valid for \code{tau=0.2}, \code{m=0}, and \code{z=9}. 
-#' In case that non-default values are chosen for \code{tau}, \code{m}, or \code{z}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. Caution, for M=10,000 this takes at least thirty minutes, depending on the length of the time series.
-#' Smaller M, however, make the results unreliable.
+#' In case that non-default values are chosen for \code{tau}, \code{m}, or \code{z}, it is recommended to set \code{simu=1} which means that critical values are simulated based on the given data using M replications. 
+#' Caution, for a time series of length \code{T=100} and \code{M=10,000} replications this takes approximately fifteen minutes with increasing duration for higher T or M.  
+#' It should be noted, however, that M smaller than 10,000 make the results unreliable.
 #' 
 #' @param x the univariate numeric vector to be investigated. Missing values are not allowed.
 #' @param trend whether the time series exhibits a trend, \code{"none"} implies no trend and \code{"linear"} implies a linear trend.
@@ -34,7 +35,7 @@
 #' set.seed(410)
 #' 
 #' # generate dummy-data
-#' series <- c(rnorm(200), cumsum(rnorm(200))) 
+#' series <- c(rnorm(100), cumsum(rnorm(100))) 
 #' 
 #' # test for a break in persistence
 #' ratio_test(series)

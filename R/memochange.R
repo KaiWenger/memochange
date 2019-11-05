@@ -7,7 +7,7 @@
 #' On the other hand, the package contains the most popular approaches to test for a change in mean in a long-memory time series, which were recently reviewed by Wenger, Leschinski, and Sibbertsen (2018). 
 #' These include memory robust versions of the CUSUM, sup-Wald, and Wilcoxon type tests. The tests either utilize consistent estimates of the long-run variance or a self normalization approach in their test statistics.
 #'
-#' For details see the readme and vignettes in the corresponding GitHub repository (https://github.com/KaiWenger/memochange)
+#' For details see the readme and vignettes in the corresponding GitHub repository (https://github.com/KaiWenger/memochange).
 #'
 #' @docType package
 #' @seealso \code{\link{BP_estim}}, \code{\link{CUSUM_simple}},

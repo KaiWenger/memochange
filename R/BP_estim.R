@@ -36,12 +36,12 @@
 #' @export
 
 
-BP_estim<-function(x,trend=c("none","linear"),tau=0.2,type=c("BT","LKT","LKSN","MR"),direction=c("01","10"),d_estim=c("GPH","ELW"),d_bw=0.7,m=0,serial=c(FALSE,TRUE))
+BP_estim<-function(x,trend=c("none","linear"),tau=0.2,type=c("BT","LKT","LKSN","MR"),direction=c("01","10"),d_estim=c("ELW","GPH"),d_bw=0.7,m=0,serial=c(FALSE,TRUE))
 {
   trend<-match.arg(trend,c("none","linear"))
   type<-match.arg(type,c("BT","LKT","LKSN","MR"))
   direction<-match.arg(direction,c("01","10"))
-  d_estim<-match.arg(d_estim,c("GPH","ELW"))
+  d_estim<-match.arg(d_estim,c("ELW","GPH"))
   serial <- serial[1]
   if ((serial %in% c(FALSE, TRUE)) == FALSE) 
     stop("serial must be one of FALSE, TRUE. See details.")
