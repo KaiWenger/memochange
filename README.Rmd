@@ -52,13 +52,13 @@ install.packages("memochange")
 
 ## Examples
 
-In this section we present two short examples that illustrate how the implemented procedures can be used on a real data set. A more detailed presentation of the various tests and functions can be found in the vignette.
+In this section we present two short examples that illustrate how the implemented procedures can be used on a real data set. A more detailed presentation of the various tests and functions can be found in the vignettes.
 
 ### Tests for persistence change
 
-As an empirical example for a process that might exhibit a break in persistence, we consider the price of crude oil.  First, we download the monthly price series from the FRED data base. For this purpose we need the `data.table` package.
+As an empirical example for a time series that might exhibit a break in persistence, we consider the price of crude oil.  First, we download the monthly price series from the FRED data base. For this purpose we need the `data.table` package.
 
-```r
+```{r, echo = TRUE}
 oil=data.table::fread("https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolor=%23e1e9f0&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1168&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=MCOILWTICO&scale=left&cosd=1986-01-01&coed=2019-08-01&line_color=%234572a7&link_values=false&line_style=solid&mark_type=none&mw=3&lw=2&ost=-99999&oet=99999&mma=0&fml=a&fq=Monthly&fam=avg&fgst=lin&fgsnd=2009-06-01&line_index=1&transformation=lin&vintage_date=2019-09-23&revision_date=2019-09-23&nd=1986-01-01")
 ```
 
@@ -73,7 +73,7 @@ zoo::plot.zoo(oil_xts,xlab="",ylab="Price",main="Crude Oil Price: West Texas Int
 
 From the plot we observe that the series seems to be more variable in its second part from year 2000 onwards.  This is first evidence that a change in persistence has occurred. We can test this hypothesis using the functions `cusum_test`, `LBI_test`, `LKSN_test`, `MR_test`, and `ratio_test`. In this short example we only consider the MR test as it is the most general one of the five implemented. The functionality of the other tests is similar. They all require a univariate numeric vector `x` as an input variable and yield a matrix of test statistic and critical values as an output variable.
 
-```r
+```{r, echo = TRUE}
 library(memochange)
 x <- as.numeric(oil[,2])
 ```
@@ -86,7 +86,7 @@ MR_test(x)
 
 Here, test statistic and critical values for the null of constant persistence against an increase in persistence, a decrease in persistence, and a change in an unknown direction are displayed in a matrix. The latter accounts for the fact that we perform two tests facing a multiple testing problem. The results suggest that an increase in persistence has occurred somewhere in the series since the test statistic exceeds the critical value at the one percent level. In addition, this value is also significant when accounting for the multiple testing problem. 
 
-We can modify this default version by choosing the arguments `trend`, `tau`, `statistic`, `serial`, `simu`, and `M`. This amongst other things allows the test to be also applied for series who are suspected to exhibit linear trends or short run dynamics. Further details can be found in the vignette and on the help page of the MR test for details.
+We can modify this default version by choosing the arguments `trend`, `tau`, `statistic`, `serial`, `simu`, and `M`. This amongst other things allows the test to be also applied for series who are suspected to exhibit linear trends or short run dynamics. Further details can be found in the vignette and on the help page of the MR test.
 
 The test indicates that the oil price series exhibits an increase in memory over time. To correctly model and forecast the series, the exact location of the break is important.
 This can be estimated by the `BP_estim` function. It is important for the function that the direction of the change is correctly specified. In our case, an increase in memory has occurred so that we set direction="01".
@@ -106,69 +106,68 @@ This means that from the beginning of the sample until June 1998 the series is i
 
 The function further allows for various types of break point and memory estimators. These are presented in the vignette. 
 
-### Tests for change-in-mean
+### Tests for change in mean
 
-As an example how to conduct the change-in-mean tests implemented in the `memochange` package,  we compare the performance (in terms of size and power) of two implemented tests via a Monte Carlo simulation. We choose the two sample sizes n=[100,500] and memory parameters d=[0.1,0.2]. To estimate the memory parameter we apply the local Whittle estimator by Robinson (1995). The setup is very similar to the published paper by Wenger and Leschinski (2019) who introduce the two applied tests. The simulation can be extended by all other change-in-mean tests that are implemented in the `memochange` package, which is not been done here to save computing time. The whole following code should run just around a few seconds.
+As an empirical example for a persistent time series that might exhibit a change in mean, we consider the log squared returns of the NASDAQ in the time around the global financial crisis (2006-2009). First, we download the daily stock price series from the FRED data base. 
 
-```r
+```{r, echo = TRUE}
+nasdaq=data.table::fread("https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolor=%23e1e9f0&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1168&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=NASDAQCOM&scale=left&cosd=2006-01-01&coed=2009-01-01&line_color=%234572a7&link_values=false&line_style=solid&mark_type=none&mw=3&lw=2&ost=-99999&oet=99999&mma=0&fml=a&fq=Daily&fam=avg&fgst=lin&fgsnd=2009-06-01&line_index=1&transformation=lin&vintage_date=2019-11-04&revision_date=2019-11-04&nd=1971-02-05")
+```
+
+We calculate the log squared returns as a measure of volatility and plot the series.
+
+```{r, echo = TRUE, fig.height = 4, fig.width = 7, fig.align = "center"}
+nasdaq              <- as.data.frame(nasdaq)
+nasdaq[nasdaq=="."] <- NA
+nasdaq              <- stats::na.omit(nasdaq)
+nasdaq$NASDAQCOM    <- as.numeric(nasdaq$NASDAQCOM)
+nasdaq$DATE=zoo::as.Date(nasdaq$DATE)
+nasdaq_xts=xts::xts(nasdaq[,-1],order.by = nasdaq$DATE)
+nasdaq_xts          <- log(diff(nasdaq_xts)^2)[-1]
+zoo::plot.zoo(nasdaq_xts, xlab="", ylab="Log squared returns", main="Log squared returns of the NASDAQ")
+```
+
+A first visual impression is that the mean seems to increase in the second part of the sample. Furthermore, applying the local Whittle estimator (choosing the bandwidth as T^0.65, which is usual in literature) we observe that there is the potential that the time series possess high persistence (d>0).
+
+```{r, echo = TRUE}
+T           <- length(nasdaq_xts)
+x           <- as.numeric(nasdaq_xts)
+d_est       <- LongMemoryTS::local.W(x, m=floor(1+T^0.65))$d
+round(d_est,3)
+```
+
+Therefore, to test whether a change in mean occured in the time series one of the functions `CUSUM_simple`, `CUSUMfixed`, `CUSUMLM`, `fixbsupw`, `snsupwald`, `snwilcoxon`, and `wilcoxonLM` have to be used. Here, we only consider a type of the CUSUMfixed test since it contains the most user chosen arguments among all seven implemented functions to test on a change in mean. The functionality of the other tests is similar. All tests require a univariate numeric vector `x` as an input variable and yield a matrix of test statistic and critical values as an output variable.  
+Applying the CUSUM fixed-m type A test of @wenger2019fixed with the previously estimated long-memory parameter and the recommended bandwidth m=10 leads to
+
+```{r, echo = TRUE}
 library(memochange)
-
-test_func<-function(n,d)
-{
-  tseries     <- fracdiff::fracdiff.sim(n=n,d=d)$series
-  
-  changep     <- c(rep(0,n/2),rep(1,n/2))
-  tseries2    <- tseries+changep
-
-  d_est       <- LongMemoryTS::local.W(tseries, m=floor(1+n^0.65))$d
-  d_est2      <- LongMemoryTS::local.W(tseries2, m=floor(1+n^0.65))$d
-  
-  typeAsize   <- CUSUMfixed(tseries,d=d_est,procedure="CUSUMfixedm_typeA",bandw=10)
-  typeBsize   <- CUSUMfixed(tseries,d=d_est,procedure="CUSUMfixedm_typeB",bandw=10)
-  
-  typeApower  <- CUSUMfixed(tseries2,d=d_est2,procedure="CUSUMfixedm_typeA",bandw=10)
-  typeBpower  <- CUSUMfixed(tseries2,d=d_est2,procedure="CUSUMfixedm_typeB",bandw=10)
-  
-  decAsize    <- typeAsize["Teststatistic"] > typeAsize["95%"]
-  decBsize    <- typeBsize["Teststatistic"] > typeBsize["95%"]
-  
-  decApower   <- typeApower["Teststatistic"] > typeApower["95%"]
-  decBpower   <- typeBpower["Teststatistic"] > typeBpower["95%"]
-  
-  return(list("decAsize"=unname(decAsize),"decBsize"=unname(decBsize),"decApower"=unname(decApower),"decBpower"=unname(decBpower)))
-}
+CUSUMfixed(x,d=d_est,procedure="CUSUMfixedm_typeA",bandw=10)
 ```
 
-The code implements the function the Monte Carlo simulation is based on. First, a long-memory time series `tseries` of length n with memory d is simulated that is not subject to a change-in-mean. For the second time series `tseries2` a mean shift of size 1 is added. Then the memory parameters are estimated by local Whittle approach and the fixed-m CUSUM type A and B tests of Wenger and Leschinski (2019) are applied. Arguments that must be provided to the tests are the estimated long-memory parameters, the type of procedure to be applied, as well as the bandwidth that is used in fixed-m estimation. We choose the values suggested in Wenger and Leschinski (2019).
+Here, test statistic and critical values for the null hypothesis of a constant mean against the alternative of a change in mean at some unknown point in time are displayed in a matrix. The results suggest that a change in mean has occurred somewhere in the series since the test statistic exceeds the critical value at the one percent level. 
 
-In the next step the Monte Carlo simulation (250 replications) is done. To do so, the `MonteCarlo` package needs to be loaded. The results of the Monte Carlo simulation is viewed as a LaTeX table.
+The test can be modified by choosing the arguments `d`, `procedure`, `bandw`, and `tau`. Depending on the kind of short run dynamics in the series, a different bandwidth and/or procedure can be advantageous (see @wenger2019fixed). Further details can be found in the vignette and on the help page of the CUSUMfixed test.
 
-```r
-n_grid  <- c(100,500)
-d_grid  <- c(0.1,0.2)
+The test indicates that the log squared return series exhibits a change in mean at some unknown point in time. To correctly model and forecast the series, the exact location of the break is important.
+This can be estimated by the `breakpoints` function from the `strucchange` package. 
 
-param_list=list("n"=n_grid, "d"=d_grid)
-erg     <- MonteCarlo::MonteCarlo(func=test_func, nrep=250, param_list=param_list, ncpus=1)
-
-rows    <- c("n")
-cols    <- c("d")
-MonteCarlo::MakeTable(output=erg, rows=rows, cols=cols, digits=2, include_meta = FALSE)
+```{r, echo = TRUE}
+BP       <- strucchange::breakpoints(x~1)$breakpoints
+BP_index <- zoo::index(nasdaq_xts[BP])
+BP_index
 ```
 
-Both tests should hold their nominal size (first two tables), which is chosen as 5%. Furthermore, the power of the tests (third and fourth table) should increase as the sample size n increases and decrease as the memory d increases. Example results of a run of the Monte Carlo code are given in the next table.
+The function indicates that there is a break in persistence in July, 2007, which roughly corresponds to the start of the world financial crisis. The following plot shows the time series and the estimated means before and after the break
 
-| n/d  | 0.1    |  0.2  |  0.1 |  0.2    |
-| :-   | :----: | :---: | :---:| :----:  | 
-|      |        |       |      |         |
-| size | type A |       |type B|         | 
-|      |        |       |      |         |
-| 100  |  0.052 |  0.040|0.052 | 0.056   | 
-| 500  |  0.068 |  0.052|0.068 | 0.056   | 
-|      |        |       |      |         |
-|power | type A |       |type B|         | 
-|      |        |       |      |         | 
-| 100  | 0.688  | 0.440 | 0.640| 0.416   | 
-| 500  | 1.000  | 0.900 | 1.000| 0.848   |  
+```{r, echo = TRUE}
+T_index  <- zoo::index(nasdaq_xts[T])
+m1       <- mean(nasdaq_xts[1:BP])
+m2       <- mean(nasdaq_xts[(BP+1):T])
+zoo::plot.zoo(nasdaq_xts, xlab="", ylab="Log squared returns", main="Log squared returns of the NASDAQ")
+graphics::segments(0,m1,BP_index,m1,col=2,lwd=2)
+graphics::segments((BP_index+1),m2,T_index,m2,col=2,lwd=2)
+```
+
 
 ## Contributions
 
