@@ -17,19 +17,25 @@
 #' # generate a fractionally integrated (long-memory) time series without a change in mean
 #' tseries  <- fracdiff::fracdiff.sim(n=T, d=d)$series
 #'
-#' # generate a fractionally integrated (long-memory) time series with a change in mean in the middle of the series
+#' # generate a fractionally integrated (long-memory) time series 
+#' # with a change in mean in the middle of the series
 #' changep  <- c(rep(0,T/2), rep(1,T/2))
 #' tseries2 <- tseries+changep
 #' 
-#' # estimate the long-memory parameter of both series via local Whittle approach. The bandwidth to estimate d is chosen as T^0.65, which is usual in literature
+#' # estimate the long-memory parameter of both series via local 
+#' # Whittle approach. The bandwidth to estimate d is chosen 
+#' # as T^0.65, which is usual in literature
 #' d_est    <- LongMemoryTS::local.W(tseries, m=floor(1+T^0.65))$d
 #' d_est2   <- LongMemoryTS::local.W(tseries2, m=floor(1+T^0.65))$d
 #'
 #' # perform the test on both time series
 #' CUSUM_simple(tseries, d_est)
 #' CUSUM_simple(tseries2, d_est2)
-#' # For the series with no change in mean the test does not reject the null hypothesis of a constant mean across time at any reasonable significance level.
-#' # For the series with a change in mean the test rejects the null hypothesis at a 5% significance level.
+#' # For the series with no change in mean the test does not 
+#' # reject the null hypothesis of a constant mean across time 
+#' # at any reasonable significance level.
+#' # For the series with a change in mean the test rejects the 
+#' # null hypothesis at a 5% significance level.
 #' @references
 #' Wenger, K. and Leschinski, C. and Sibbertsen, P. (2018): A simple test on structural change in long-memory time series. Economics Letters, 136, pp. 90-94.
 #' @export

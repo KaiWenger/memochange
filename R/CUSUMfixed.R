@@ -25,11 +25,14 @@
 #' # generate a fractionally integrated (long-memory) time series
 #' tseries  <- fracdiff::fracdiff.sim(n=T, d=d)$series
 #'
-#' # generate a fractionally integrated (long-memory) time series with a change in mean in the middle of the series
+#' # generate a fractionally integrated (long-memory) time series 
+#' # with a change in mean in the middle of the series
 #' changep  <- c(rep(0,T/2), rep(1,T/2))
 #' tseries2 <- tseries+changep
 #' 
-#' # estimate the long-memory parameter of both series via local Whittle approach. The bandwidth to estimate d is chosen as T^0.65, which is usual in literature
+#' # estimate the long-memory parameter of both series via local 
+#' # Whittle approach. The bandwidth to estimate d is chosen 
+#' # as T^0.65, which is usual in literature
 #' d_est    <- LongMemoryTS::local.W(tseries, m=floor(1+T^0.65))$d
 #' d_est2   <- LongMemoryTS::local.W(tseries2, m=floor(1+T^0.65))$d
 #'
@@ -43,8 +46,11 @@
 #' CUSUMfixed(tseries2, d=d_est2, procedure="CUSUMfixedb_typeB", bandw=0.1)
 #' CUSUMfixed(tseries2, d=d_est2, procedure="CUSUMfixedm_typeA", bandw=10)
 #' CUSUMfixed(tseries2, d=d_est2, procedure="CUSUMfixedm_typeB", bandw=10)
-#' # For the series with no change in mean all tests do not reject the null hypothesis of a constant mean across time at any reasonable significance level.
-#' # For the series with a change in mean all tests reject the null hypothesis at a 1% significance level.
+#' # For the series with no change in mean all tests do not reject 
+#' # the null hypothesis of a constant mean across time at 
+#' # any reasonable significance level.
+#' # For the series with a change in mean all tests reject the 
+#' # null hypothesis at a 1% significance level.
 #' @references
 #' Wenger, K. and Leschinski, C. (2019): Change-in-mean tests in long-memory time series: a review of recent developments. AStA Advances in Statistical Analysis, 103:2, pp. 237-256.
 #'
@@ -67,8 +73,6 @@ CUSUMfixed     <- function(x,d,procedure,bandw,tau=0.15)
     stop("It must hold that 0<tau<1")
   if(tau!=0.15)
     warning("Critical values are just implemented for tau=0.15")
-  if(d<=(-0.5) | d>=0.5)
-    warning("Critical values are just implemented for -0.5<d<0.5")
   
   T            <- length(x)
   m            <- bandw*T
