@@ -6,7 +6,7 @@ bibliography: paper.bib
 biblio-style: "apalike"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{memochange-Tutorial: Change in Mean}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
