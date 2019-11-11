@@ -11,14 +11,14 @@ Testing for Structural Breaks under Long Memory and Testing for Changes in Persi
 An `R` package for identifying structural changes in time series.
 
 Description
-===========
+-----------
 
 For modeling and forecasting time series it is essential to know whether the series are stationary or non-stationary as many commonly applied statistical methods such as OLS are invalid in case of non-stationarity. Examples of non-stationary series include processes that exhibit shifts in mean, i.e. the expected value of the series changes over time, and processes with breaks in the autocovariance often refered to as changes in persistence, i.e. the dependence structure of the series changes over time. The memochange package allows to consistently identify such changes in mean and autocovariance. This helps to avoid model misspecification and improve forecasting the series.
 
 There is a wide range of macroeconomic and financial time series where the procedures can respectively should be applied. This includes beta, inflation rates, interest rates, trading volume, volatilities, and so on.
 
 Installation
-============
+------------
 
 You can install this R package from GitHub:
 
@@ -103,7 +103,7 @@ BP_estim(x,direction="01")
 #> [1] 0.07142857
 ```
 
-This yields a list stating the location of the break (observation 151), semiparametric estimates of the order of integration in the two regimes (0.86 and 1.03) as well as the standard deviations of these estimates (0.13 and 0.15).
+This yields a list stating the location of the break (observation 151), semiparametric estimates of the order of integration (the persistence) in the two regimes (0.86 and 1.03) as well as the standard deviations of these estimates (0.13 and 0.15).
 
 ``` r
 oil$DATE[151]
@@ -112,7 +112,7 @@ oil$DATE[151]
 
 Consequently, the function indicates that there is a break in persistence in July, 1998. This means that from the beginning of the sample until June 1998 the series is integrated with an order of 0.85 and from July 1998 on the order of integration increased to 1.03.
 
-The function further allows for various types of break point and memory estimators. These are presented in the vignette.
+The function further allows for various types of break point and persistence estimators. These are presented in the vignette.
 
 ### Tests for change in mean
 
