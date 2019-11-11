@@ -4,7 +4,7 @@ author: "Janis Becker"
 date: "`r Sys.Date()`"
 bibliography: paper.bib
 biblio-style: "apalike"
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{Simulation}
   %\VignetteEngine{knitr::rmarkdown}
