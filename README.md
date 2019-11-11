@@ -13,9 +13,11 @@ An `R` package for identifying structural changes in time series.
 Description
 -----------
 
-For modeling and forecasting time series it is essential to know whether the series are stationary or non-stationary as many commonly applied statistical methods such as OLS are invalid in case of non-stationarity. Examples of non-stationary series include processes that exhibit shifts in mean, i.e. the expected value of the series changes over time, and processes with breaks in the autocovariance often refered to as changes in persistence, i.e. the dependence structure of the series changes over time. The memochange package allows to consistently identify such changes in mean and autocovariance. This helps to avoid model misspecification and improve forecasting the series.
+For modeling and forecasting time series it is essential to know whether the series are stationary or non-stationary since many commonly applied statistical methods (such as OLS) are invalid under non-stationarity. Two features that cause a time series to be non-stationary are considered here. On the one hand a time series can be subject to a change in mean, i.e. the expected value of the series changes over time. On the other hand a time series can be subject to a break in the autocovariance often refered to as a change in persistence, i.e. the dependence structure of the series changes over time.
 
-There is a wide range of macroeconomic and financial time series where the procedures can respectively should be applied. This includes beta, inflation rates, interest rates, trading volume, volatilities, and so on.
+The memochange package allows to consistently identify such changes in mean and persistence. This helps to avoid model misspecification and improve forecasting the series.
+
+Potential examples for series with a change in mean and/or in persistence are found in the macroeconomic and financial area. This includes beta, inflation rates, interest rates, trading volume, volatilities, and so on.
 
 Installation
 ------------
