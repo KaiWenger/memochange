@@ -53,6 +53,9 @@ snsupwald <- function(x,d,tau=0.15)
     stop("x contains missing values")
   if(tau<=0 | tau>=1)
     stop("It must hold that 0<tau<1")
+  if (mode(x) %in% ("numeric") == FALSE | is.vector(x) == 
+      FALSE) 
+    stop("x must be a univariate numeric vector")
   if(tau!=0.15)
     warning("Critical values are just implemented for tau=0.15")
   

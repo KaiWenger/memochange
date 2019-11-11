@@ -44,6 +44,9 @@ CUSUM_simple    <- function(x,d)
 {
   if (any(is.na(x)))
     stop("x contains missing values")
+  if (mode(x) %in% ("numeric") == FALSE | is.vector(x) == 
+      FALSE) 
+    stop("x must be a univariate numeric vector")
   
   diff.series   <- fracdiff::diffseries(x,d=d)
   CUSUM_diff    <- strucchange::gefp(diff.series ~ 1, fit = stats::lm, vcov = sandwich::kernHAC)
