@@ -1,0 +1,3 @@
+# Statement of Author Contributions
+
+The authors of the `memochange` package are Kai Wenger and Janis Becker. Kai Wenger is responsible for all implementations of the tests on change in mean under long memory. Specifically this includes the functions `CUSUM_simple`, `CUSUMfixed`, `CUSUMLM`, `fixbsupw`, `snsupwald`, `snwilcoxon`, and `wilcoxonLM`. Janis Becker is responsible for all implementations of tests and estimation procedures on change in persistence. Specifically this includes the functions `BP_estim`, `MR_test`, `cusum_test`, `LBI_test`, `LKSN_test`, `pb_sim`, and `ratio_test`.
