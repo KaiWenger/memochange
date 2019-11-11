@@ -8,9 +8,17 @@ Testing for Structural Breaks under Long Memory and Testing for Changes in Persi
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/memochange)](https://CRAN.R-project.org/package=memochange) [![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/memochange)](https://CRAN.R-project.org/package=memochange) [![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0) [![BuildStatus](https://api.travis-ci.org/KaiWenger/memochange.svg?branch=master)](https://travis-ci.com/KaiWenger/memochange)
 
-The `memochange` package implements the most prominent test procedures and break point estimators for persistent processes that exhibit structural breaks in mean or in persistence. On the one hand, the package contains the most popular approaches for testing whether a time series exhibits a break in persistence from I(0) to I(1) or vice versa. In case the tests reject the null of constant persistence, various breakpoint estimators are available to detect the point of the break as well as the order of integration in the two regimes. On the other hand, the package contains the most popular approaches to test for a change-in-mean in a long-memory time series. These include memory robust versions of the CUSUM, sup-Wald, and Wilcoxon type tests. The tests either utilize consistent estimates of the long-run variance or a self normalization approach in their test statistics.
+An `R` package for identifying structural changes in time series.
 
-`memochange` may be of interest to those who analyse macroeconomic and financial time series such as inflation rates, trading volume, interest rates, volatilities and so on.
+Description
+===========
+
+For modeling and forecasting time series it is essential to know whether the series are stationary or non-stationary as many commonly applied statistical methods such as OLS are invalid in case of non-stationarity. Examples of non-stationary series include processes that exhibit shifts in mean, i.e. the expected value of the series changes over time, and processes with breaks in the autocovariance often refered to as changes in persistence, i.e. the dependence structure of the series changes over time. The memochange package allows to consistently identify such changes in mean and autocovariance. This helps to avoid model misspecification and improve forecasting the series.
+
+There is a wide range of macroeconomic and financial time series where the procedures can respectively should be applied. This includes beta, inflation rates, interest rates, trading volume, volatilities, and so on.
+
+Installation
+============
 
 You can install this R package from GitHub:
 
@@ -173,7 +181,7 @@ graphics::segments(0,m1,BP_index,m1,col=2,lwd=2)
 graphics::segments((BP_index+1),m2,T_index,m2,col=2,lwd=2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
 
 Contributions
 -------------

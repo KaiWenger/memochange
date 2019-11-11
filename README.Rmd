@@ -24,14 +24,18 @@ knitr::opts_chunk$set(
 [![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0) 
 [![BuildStatus](https://api.travis-ci.org/KaiWenger/memochange.svg?branch=master)](https://travis-ci.com/KaiWenger/memochange)
 
+An `R` package for identifying structural changes in time series. 
 
-The `memochange` package implements the most prominent test procedures and break point estimators for persistent processes that exhibit structural breaks in mean or in persistence.
-On the one hand, the package contains the most popular approaches for testing whether a time series exhibits a break in persistence from I(0) to I(1) or vice versa. In case the tests reject the null of constant persistence, various breakpoint estimators are available to detect the point of the break as well as the order of integration in the two regimes.
-On the other hand, the package contains the most popular approaches to test for a change-in-mean in a long-memory time series. 
-These include memory robust versions of the CUSUM, sup-Wald, and Wilcoxon type tests. The tests either utilize consistent estimates of the long-run variance or a self normalization approach in their test statistics.
+# Description
 
-`memochange` may be of interest to those who analyse macroeconomic and financial time series such as inflation rates, trading volume, interest rates, volatilities and so on.
+For modeling and forecasting time series it is essential to know whether the series are stationary or non-stationary as many commonly applied statistical methods 
+such as OLS are invalid in case of non-stationarity. Examples of non-stationary series include processes that exhibit shifts in mean, i.e. the expected value of the series changes over time, 
+and processes with breaks in the autocovariance often refered to as changes in persistence, i.e. the dependence structure of the series changes over time. 
+The memochange package allows to consistently identify such changes in mean and autocovariance. This helps to avoid model misspecification and improve forecasting the series. 
 
+There is a wide range of macroeconomic and financial time series where the procedures can respectively should be applied. This includes beta, inflation rates, interest rates, trading volume, volatilities, and so on.
+
+# Installation
 
 You can install this R package from GitHub:
 
@@ -159,7 +163,7 @@ BP_index
 
 The function indicates that there is a break in persistence in July, 2007, which roughly corresponds to the start of the world financial crisis. The following plot shows the time series and the estimated means before and after the break
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, fig.height = 4, fig.width = 7, fig.align = "center"}
 T_index  <- zoo::index(nasdaq_xts[T])
 m1       <- mean(nasdaq_xts[1:BP])
 m2       <- mean(nasdaq_xts[(BP+1):T])
