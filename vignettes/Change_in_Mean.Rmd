@@ -162,7 +162,7 @@ As a second example, we compare the performance of two of the implemented tests 
 
 We simulate fractionally integrated White noise time series (with and without breaks) using the `fracdiff.sim` function from the `fracdiff` package. To estimate the memory parameter we apply the local Whittle estimator by @robinson1995gaussian using the `local.W` function from the `LongMemoryTS` package. The setup is very similar to the published paper by @wenger2019fixed. The simulation can be extended by all other change-in-mean tests that are implemented in the `memochange` package, which is not been done here to save computing time.
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, eval=FALSE}
 
 test_func<-function(T,d)
 {
@@ -199,7 +199,7 @@ test_func<-function(T,d)
 
 In the next step the Monte Carlo simulation ($N=500$ replications) is executed. The parameters we use for the simulated fractionally integrated White noise time series are series length $T=[50,100]$ and long-memory parameters $d=[0.1,0.2]$.
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, eval=FALSE}
 set.seed(410)
 # Parameter setting considered
 T_grid              <- c(50,100)
@@ -228,6 +228,29 @@ for(TTT in 1:length(T_grid))
 }
 # Results
 resultmat
+#> , , type-A size
+#> 
+#>       d=0.1 d=0.2
+#> T=50  0.020 0.032
+#> T=100 0.026 0.046
+#> 
+#> , , type-B size
+#> 
+#>       d=0.1 d=0.2
+#> T=50  0.016 0.028
+#> T=100 0.036 0.046
+#> 
+#> , , type-A power
+#> 
+#>       d=0.1 d=0.2
+#> T=50   0.86 0.824
+#> T=100  1.00 0.960
+#> 
+#> , , type-B power
+#> 
+#>       d=0.1 d=0.2
+#> T=50  0.830 0.770
+#> T=100 0.998 0.938
 ```
 
 We observe that both tests do not exceed $\alpha=5\%$ rejections when no break occured in the long-memory time series (first two tables). Furthermore, the type-A test rejects more often than the type-B test the null hypothesis when a shift occured. Therefore, this small Monte Carlo simulation leads to the same conclusion as the paper of @wenger2019fixed, i.e. that the type-A test outperforms the type-B test for fractionally integrated White noise time series when the break is in the middle of the series.
