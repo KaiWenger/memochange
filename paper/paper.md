@@ -41,6 +41,6 @@ Besides the series featured in Figure 1, there is a wide range of macroeconomic 
 
 # Acknowledgements
 
-Financial support of the Deutsche Forschungsgemeinschaft (DFG) is gratefully acknowledged. We would like to thank Christian Leschinski and Simon Wingert for their helpful comments and suggestions.
+Financial support of the Deutsche Forschungsgemeinschaft (DFG) is gratefully acknowledged. We would like to thank Jonas Moss, Stefanie LaZerte, Christian Leschinski, and Simon Wingert for their helpful comments and suggestions.
 
 # References
