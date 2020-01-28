@@ -11,6 +11,7 @@
 v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0)
 [![BuildStatus](https://api.travis-ci.org/KaiWenger/memochange.svg?branch=master)](https://travis-ci.com/KaiWenger/memochange)
 [![DOI](https://zenodo.org/badge/210588375.svg)](https://zenodo.org/badge/latestdoi/210588375)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.01820)](https://doi.org/10.21105/joss.01820)
 
 An `R` package for identifying structural changes in time series.
 
@@ -75,9 +76,6 @@ To get a first visual impression, we plot the series.
 oil=as.data.frame(oil)
 oil$DATE=zoo::as.Date(oil$DATE)
 oil_xts=xts::xts(oil[,-1],order.by = oil$DATE)
-#> Registered S3 method overwritten by 'xts':
-#>   method     from
-#>   as.zoo.xts zoo
 zoo::plot.zoo(oil_xts,xlab="",ylab="Price",main="Crude Oil Price: West Texas Intermediate")
 ```
 
@@ -103,14 +101,10 @@ Applying the default version of the MR test by Martins and Rodrigues
 
 ``` r
 MR_test(x)
-#>                                          90%      95%      99%
-#> Against increase in memory          4.270666 5.395201 8.233674
-#> Against decrease in memory          4.060476 5.087265 7.719128
-#> Against change in unknown direction 5.065695 6.217554 9.136441
-#>                                     Teststatistic
-#> Against increase in memory               16.21494
-#> Against decrease in memory                2.14912
-#> Against change in unknown direction      16.21494
+#>                                          90%      95%      99% Teststatistic
+#> Against increase in memory          4.270666 5.395201 8.233674      16.21494
+#> Against decrease in memory          4.060476 5.087265 7.719128       2.14912
+#> Against change in unknown direction 5.065695 6.217554 9.136441      16.21494
 ```
 
 Here, test statistic and critical values for the null of constant
@@ -272,12 +266,6 @@ graphics::segments((BP_index+1),m2,T_index,m2,col=2,lwd=2)
 ```
 
 <img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
-
-## Contributions
-
-We welcome any and all contributions\! To make the process as painless
-as possible for all involved, please see our [guide to
-contributing](contributing.md)
 
 ## References
 
