@@ -11,7 +11,7 @@
 v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0)
 [![BuildStatus](https://api.travis-ci.org/KaiWenger/memochange.svg?branch=master)](https://travis-ci.com/KaiWenger/memochange)
 [![DOI](https://zenodo.org/badge/210588375.svg)](https://zenodo.org/badge/latestdoi/210588375)
-[![JOSS](https://joss.theoj.org/papers/10.21105/joss.01820)](https://doi.org/10.21105/joss.01820)
+[![JOSS](https://joss.theoj.org/papers/10.21105/joss.01820/status.svg)](https://doi.org/10.21105/joss.01820)
 
 An `R` package for identifying structural changes in time series.
 
