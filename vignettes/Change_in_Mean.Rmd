@@ -31,7 +31,7 @@ utils::data(nhtemp)
 graphics::plot(nhtemp)
 ```
 
-Three standard procedures to test for a change in mean at an unknown point in time are CUSUM tests originally proposed by @brown1975techniques, Wilcoxon-type rank tests (e.g. @bauer1972constructing), and sup-Wald tests by @andrews1993tests. Applying the standard CUSUM test, for example, we observe for the above temperature series that the corresponding p-value of the test is smaller than any resonable significance level. 
+Three standard procedures to test for a change in mean at an unknown point in time are CUSUM tests originally proposed by @brown1975techniques, Wilcoxon-type rank tests (e.g. @bauer1972constructing), and sup-Wald tests by @andrews1993tests. Applying the standard CUSUM test, for example, we observe for the above temperature series that the corresponding p-value of the test is smaller than any resonable significance level.
 
 ```{r, echo = TRUE}
 strucchange::sctest(strucchange::efp(nhtemp ~ 1, type = "OLS-CUSUM"))
@@ -39,8 +39,8 @@ strucchange::sctest(strucchange::efp(nhtemp ~ 1, type = "OLS-CUSUM"))
 
 Therefore, it rejects the null hypothesis of a constant mean over time and we conclude that there is a change in mean.
 
-However, all these standard tests suffer from the issue that they cannot be applied under long memory. In a persistent long-memory time series far distant observations are significantly correlated. The degree of persistence is given by the long-memory parameter $d \in [0,0.5)$. Higher values of $d$ indicate higher persistence of the series. The special case $d=0$ is called short memory where far distant observations are not significantly correlated anymore. 
-The difference between a short-memory and a long-memory time series can be seen easily in the autocorrelation function (acf) of a series, which gives the correlation between observations separated by various time lags. 
+However, all these standard tests suffer from the issue that they cannot be applied under long memory. In a persistent long-memory time series far distant observations are significantly correlated. The degree of persistence is given by the long-memory parameter $d \in [0,0.5)$. Higher values of $d$ indicate higher persistence of the series. The special case $d=0$ is called short memory where far distant observations are not significantly correlated anymore.
+The difference between a short-memory and a long-memory time series can be seen easily in the autocorrelation function (acf) of a series, which gives the correlation between observations separated by various time lags.
 
 ```{r, echo = TRUE, fig.height = 4, fig.width = 7, fig.align = "center"}
 T            <- 1000
@@ -79,15 +79,15 @@ Due to the problems described, a lot of researchers modified standard testing pr
 
 The tests can be further divided into more or less three groups depending on how the variance of the mean (long-run variance) that appears in the denominator of all test statistics is estimated. Without going into too many details, the first group (CUSUM-LM and Wilcoxon-LM tests) utilizes the MAC estimator by @robinson2005robust that consistently estimates the long-run variance under long memory. The second group (self-normalized Wilcoxon and self-normalized sup-Wald tests) applies a self-normalization approach (see @shao2010self). A self-normalizer is not a consistent estimate of the long-run variance, but proportional to it, even when $d>0$. The third group (CUSUM fixed bandwidth and fixed-b sup-Wald tests) uses fixed bandwidth approach (see @kiefer2005new and @hualde2017fixed). It is a generalization of the self-normalization approach.
 
-@wenger2019change observe via simulations that for fractionally integrated White noise time series (which is one class of long-memory time series) the CUSUM testing procedure seems to offer the highest rejection rates under the alternative of a mean shift (i.e. offers the highest power). However, the first group of tests that apply a consistent estimator of the long-run variance (e.g. the CUSUM-LM test) also rejects the null hypothesis of a constant mean too often in a time series that is not subject to a mean shift. In other words these tests are often size distorted. In contrast, the self-normalized and fixed bandwidth tests hold their size in most of the situations. For fractionally integrated heavy tailed time series (which is another class of long-memory time series) it is shown by @dehling2013non and @betken2016testing that Wilcoxon type tests are superior to CUSUM tests. 
+@wenger2019change observe via simulations that for fractionally integrated White noise time series (which is one class of long-memory time series) the CUSUM testing procedure seems to offer the highest rejection rates under the alternative of a mean shift (i.e. offers the highest power). However, the first group of tests that apply a consistent estimator of the long-run variance (e.g. the CUSUM-LM test) also rejects the null hypothesis of a constant mean too often in a time series that is not subject to a mean shift. In other words these tests are often size distorted. In contrast, the self-normalized and fixed bandwidth tests hold their size in most of the situations. For fractionally integrated heavy tailed time series (which is another class of long-memory time series) it is shown by @dehling2013non and @betken2016testing that Wilcoxon type tests are superior to CUSUM tests.
 
-The simple CUSUM test by @wenger2018simple is a little bit exceptional in the list of tests implemented. The reason is that instead of modifying the standard CUSUM test it modifies the data the standard test is applied on. 
+The simple CUSUM test by @wenger2018simple is a little bit exceptional in the list of tests implemented. The reason is that instead of modifying the standard CUSUM test it modifies the data the standard test is applied on.
 
 ## Usage
 
 Two examples how to conduct the change-in-mean tests implemented in the `memochange` package are discussed in the following. The first example is an application of the tests to a real data set. The second example is a small Monte Carlo simulation where the performance of the tests is compared.
 
-First, we consider the log squared returns of the NASDAQ in the time around the global financial crisis (2006-2009). We download the daily stock price series from the FRED data base. 
+First, we consider the log squared returns of the NASDAQ in the time around the global financial crisis (2006-2009). We download the daily stock price series from the FRED data base.
 
 ```{r, echo = TRUE}
 nasdaq=data.table::fread("https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolor=%23e1e9f0&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1168&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=NASDAQCOM&scale=left&cosd=2006-01-01&coed=2009-01-01&line_color=%234572a7&link_values=false&line_style=solid&mark_type=none&mw=3&lw=2&ost=-99999&oet=99999&mma=0&fml=a&fq=Daily&fam=avg&fgst=lin&fgsnd=2009-06-01&line_index=1&transformation=lin&vintage_date=2019-11-04&revision_date=2019-11-04&nd=1971-02-05")
@@ -96,8 +96,8 @@ nasdaq=data.table::fread("https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolo
 Next calculate the log squared returns as a measure of volatility and plot the series.
 
 ```{r, echo = TRUE, fig.height = 4, fig.width = 7, fig.align = "center"}
+nasdaq[NASDAQCOM==".", NASDAQCOM := NA]
 nasdaq              <- as.data.frame(nasdaq)
-nasdaq[nasdaq=="."] <- NA
 nasdaq              <- stats::na.omit(nasdaq)
 nasdaq$NASDAQCOM    <- as.numeric(nasdaq$NASDAQCOM)
 nasdaq$DATE=zoo::as.Date(nasdaq$DATE)
@@ -126,7 +126,7 @@ As a second argument the `type` of the CUSUM fixed bandwidth function has to be 
 
 In all fixed bandwidth functions (`CUSUMfixed`, `fixbsupw`) the bandwidth `bandw` has to be chosen. The bandwidth determines how many autocovariances for the fixed-$b$ tests and respectively how many periodogram ordinates for the fixed-$M$ tests are included in the estimators of the long-run variance. For the fixed-$b$ tests $b\in(0,1]$ and for the fixed-$M$ tests $M\in[1,T]$. Since the critical values of all fixed bandwidth tests depend not only on $d$, but also on the bandwidth, just for a couple of bandwidths critical values are given in the functions. @wenger2019fixed and @iacone2014fixed suggest to use $b=0.1$ and $M=10$.
 
-The last argument of all tests is `tau`. It corresponds to the search area $[\tau,1-\tau]$ with $\tau \in (0,1)$, in which the test statistics are calculated. @andrews1993tests suggests using $\tau_{1}=1-\tau_{2}=0.15$, which is the default value for `tau`. Note that critical values of the tests are also dependent on `tau` and just implemented for the default value. 
+The last argument of all tests is `tau`. It corresponds to the search area $[\tau,1-\tau]$ with $\tau \in (0,1)$, in which the test statistics are calculated. @andrews1993tests suggests using $\tau_{1}=1-\tau_{2}=0.15$, which is the default value for `tau`. Note that critical values of the tests are also dependent on `tau` and just implemented for the default value.
 
 Executing the test we get the following result.
 
@@ -138,7 +138,7 @@ CUSUMfixed(x,d=d_est,procedure="CUSUMfixedm_typeA",bandw=10)
 The output of all functions is a matrix consisting of the test statistic and critical values for the null hypothesis of a constant mean against the alternative of a change in mean at some unknown point in time. Here, the results suggest that a change in mean has occurred somewhere in the series since the test statistic exceeds the critical value at the one percent level.
 
 To correctly model and forecast the series, the exact location of the break is important.
-This can be estimated by the `breakpoints` function from the `strucchange` package. 
+This can be estimated by the `breakpoints` function from the `strucchange` package.
 
 ```{r, echo = TRUE}
 BP       <- strucchange::breakpoints(x~1)$breakpoints
@@ -166,33 +166,33 @@ We simulate fractionally integrated White noise time series (with and without br
 
 test_func<-function(T,d)
 {
-  # Simulate a fractionally integrated (long-memory) time series of 
+  # Simulate a fractionally integrated (long-memory) time series of
   # length T with memory d that is not subject to a shift.
   tseries     <- fracdiff::fracdiff.sim(n=T,d=d)$series
 
-  # Simulate a fractionally integrated (long-memory) time series of 
+  # Simulate a fractionally integrated (long-memory) time series of
   # length T with memory d that is subject to a shift in the middle of
   # the sample of magnitude 2.  
   changep     <- c(rep(0,T/2),rep(2,T/2))
   tseries2    <- tseries+changep
 
-  # Estimate the long-memory parameter of both series using the suggested bandwidth. 
+  # Estimate the long-memory parameter of both series using the suggested bandwidth.
   d_est       <- LongMemoryTS::local.W(tseries, m=floor(1+T^0.65))$d
   d_est2      <- LongMemoryTS::local.W(tseries2, m=floor(1+T^0.65))$d
-  
-  # Apply both functions on both time series. Arguments are chosen according to 
+
+  # Apply both functions on both time series. Arguments are chosen according to
   # Wenger, Leschinski (2019) who propose these tests.
   typeAsize   <- CUSUMfixed(tseries,d=d_est,procedure="CUSUMfixedm_typeA",bandw=10)
   typeBsize   <- CUSUMfixed(tseries,d=d_est,procedure="CUSUMfixedm_typeB",bandw=10)
   typeApower  <- CUSUMfixed(tseries2,d=d_est2,procedure="CUSUMfixedm_typeA",bandw=10)
   typeBpower  <- CUSUMfixed(tseries2,d=d_est2,procedure="CUSUMfixedm_typeB",bandw=10)
-  
+
   # Save if the tests reject at the 5% significance level.
   decAsize    <- typeAsize["Teststatistic"] > typeAsize["95%"]
   decBsize    <- typeBsize["Teststatistic"] > typeBsize["95%"]
   decApower   <- typeApower["Teststatistic"] > typeApower["95%"]
   decBpower   <- typeBpower["Teststatistic"] > typeBpower["95%"]
-  
+
   return(c(decAsize,decBsize,decApower,decBpower))
 }
 ```
@@ -206,7 +206,7 @@ T_grid              <- c(50,100)
 d_grid              <- c(0.1,0.2)
 N                   <- 500
 
-# Generate array to save the results 
+# Generate array to save the results
 resultmat           <- array(NA, dim=c(length(T_grid),length(d_grid),4))
 dimnames(resultmat) <- list(paste("T=",T_grid,sep=""),paste("d=",d_grid,sep=""),
                             paste(rep(c("type-A","type-B"),2),c("size","size","power","power"),sep=" "))
@@ -229,25 +229,25 @@ for(TTT in 1:length(T_grid))
 # Results
 resultmat
 #> , , type-A size
-#> 
+#>
 #>       d=0.1 d=0.2
 #> T=50  0.020 0.032
 #> T=100 0.026 0.046
-#> 
+#>
 #> , , type-B size
-#> 
+#>
 #>       d=0.1 d=0.2
 #> T=50  0.016 0.028
 #> T=100 0.036 0.046
-#> 
+#>
 #> , , type-A power
-#> 
+#>
 #>       d=0.1 d=0.2
 #> T=50   0.86 0.824
 #> T=100  1.00 0.960
-#> 
+#>
 #> , , type-B power
-#> 
+#>
 #>       d=0.1 d=0.2
 #> T=50  0.830 0.770
 #> T=100 0.998 0.938
