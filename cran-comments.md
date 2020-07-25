@@ -1,5 +1,5 @@
 ## Test environments
-* local OS X install, R 3.6.1
+* local OS X install, R 4.0.2
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -18,10 +18,4 @@ There are currently no downstream dependencies for this package.
 ## Resubmission
 This is a resubmission. In this version we have:
 
-* Added more details to the description text 
-
-* Added references describing the theoretical background of methods in the package in the Decription field of the DESCRIPTION file
-
-* Added \value tags to the Rd files in which we explain the returned objects
-
-* Deleted par() in all of our examples
+* Fixed a bug in our vignette due to the new version of the data tables package
