@@ -96,12 +96,12 @@ nasdaq=data.table::fread("https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolo
 Next calculate the log squared returns as a measure of volatility and plot the series.
 
 ```{r, echo = TRUE, fig.height = 4, fig.width = 7, fig.align = "center"}
-nasdaq[NASDAQCOM==".", NASDAQCOM := NA]
+nasdaq$NASDAQCOM    <- ifelse(nasdaq$NASDAQCOM == ".", NA, nasdaq$NASDAQCOM)
 nasdaq              <- as.data.frame(nasdaq)
 nasdaq              <- stats::na.omit(nasdaq)
 nasdaq$NASDAQCOM    <- as.numeric(nasdaq$NASDAQCOM)
-nasdaq$DATE=zoo::as.Date(nasdaq$DATE)
-nasdaq_xts=xts::xts(nasdaq[,-1],order.by = nasdaq$DATE)
+nasdaq$observation_date=zoo::as.Date(nasdaq$observation_date)
+nasdaq_xts=xts::xts(nasdaq[,-1],order.by = nasdaq$observation_date)
 nasdaq_xts          <- log(diff(nasdaq_xts)^2)[-1]
 graphics::par(mfrow=c(1,1))
 zoo::plot.zoo(nasdaq_xts, xlab="", ylab="Log squared returns", main="Log squared returns of the NASDAQ")

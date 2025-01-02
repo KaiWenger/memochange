@@ -43,8 +43,8 @@ To get a first visual impression, we plot the series.
 
 ```{r, echo = TRUE, fig.height = 4, fig.width = 7, fig.align = "center"}
 oil=as.data.frame(oil)
-oil$DATE=zoo::as.Date(oil$DATE)
-oil_xts=xts::xts(oil[,-1],order.by = oil$DATE)
+oil$observation_date=zoo::as.Date(oil$observation_date)
+oil_xts=xts::xts(oil[,-1],order.by = oil$observation_date)
 zoo::plot.zoo(oil_xts, xlab="", ylab="Price", main="Crude Oil Price: West Texas Intermediate")
 ```
 
